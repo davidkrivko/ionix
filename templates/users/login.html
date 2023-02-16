@@ -1,0 +1,132 @@
+{% extends 'base.html' %}
+
+{% block extrahead %}
+    <title>Login page</title>
+    <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f3f3f4;
+        }
+        li {
+            list-style-type: none;
+        }
+    </style>
+    <!-- Hotjar Tracking Code for https://turnonheat.com -->
+    <script>
+        (function(h,o,t,j,a,r){
+            h.hj=h.hj||function(){(h.hj.q=h.hj.q||[]).push(arguments)};
+            h._hjSettings={hjid:2681984,hjsv:6};
+            a=o.getElementsByTagName('head')[0];
+            r=o.createElement('script');r.async=1;
+            r.src=t+h._hjSettings.hjid+j+h._hjSettings.hjsv;
+            a.appendChild(r);
+        })(window,document,'https://static.hotjar.com/c/hotjar-','.js?sv=');
+    </script>
+{% endblock extrahead %}
+
+
+{% block body %}
+<div class="min-h-screen pt-12 md:pt-20 pb-6 px-2 md:px-0" style="font-family:'Lato',sans-serif;">
+
+
+       <header class="max-w-lg mx-auto">
+        {% comment %} <a href="#">
+            <h1 class="text-4xl font-bold text-white text-center">IoniqBox</h1>
+        </a> {% endcomment %}
+        </header>
+
+        <main class="max-w-lg mx-auto p-8 md:p-12 my-10">
+            <section>
+                {% comment %} <h3 class="font-bold text-2xl">Welcome to Owner Dashboard</h3> {% endcomment %}
+                <p class="text-gray-600 pt-2">Sign in to your account.</p>
+            </section>
+
+            <section class="mt-10">
+                <form class="flex flex-col" method="POST" action="{% url 'login' %}">
+                    {% csrf_token %}
+                    <div class="mb-6 pt-3 rounded bg-gray-200">
+                        <label class="block text-gray-700 text-sm font-bold mb-2 ml-3" for="email">Email</label>
+                        <input type="text" placeholder="user@mail.com" name="username" required class="bg-white rounded w-full text-gray-700 focus:outline-none border-b-4 border-gray-300 focus:border-green-600 transition duration-500 px-3 pb-3">
+                    </div>
+                    <div class="mb-6 pt-3 rounded bg-gray-200">
+                        <label class="block text-gray-700 text-sm font-bold mb-2 ml-3" for="password">Password</label>
+                        <input type="password" name="password" required id="password" class="bg-white rounded w-full text-gray-700 focus:outline-none border-b-4 border-gray-300 focus:border-green-600 transition duration-500 px-3 pb-3">
+                    </div>
+                    <div class="flex flex-row justify-end text-sm py-1 underline hover:text-purple-700">
+                        <a href="{% url 'request-reset' %}">
+                            Forgot password?
+                        </a>
+                    </div> 
+                    <div class="flex justify-end text-sm text-green-600 hover:text-green-700 hover:underline mb-6">
+                        {% if messages %}
+                            <ul class="messages">
+                                {% for message in messages %}
+                                <li>{% if message.tags %} <li class="{{ message.tags }}">{% endif %}{{ message }}</li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                        {% if form.errors %}
+                            {% for field in form %}
+                                {% for error in field.errors %}
+                                    <div class="alert alert-danger">
+                                    <strong>{{ error|escape }}</strong>
+                                    </div>
+                                {% endfor %}
+                            {% endfor %}
+                            {% for error in form.non_field_errors %}
+                                <div class="alert alert-danger">
+                                <strong>{{ error|escape }}</strong>
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+                    </div>
+                    <button class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 rounded shadow-lg hover:shadow-xl transition duration-200" type="submit">Sign In</button>
+                </form>
+            </section>
+        </main>
+
+
+    {% comment %} <div class="mx-auto flex flex-col justify-center">
+    <form method="POST" action="{% url 'login' %}">
+    {% csrf_token %}
+        <div>Login form</div>
+        <div>
+            <input class="ring-1 rounded-md mt-3 px-2 w-48 text-sm" title="" name="username" type="email" placeholder="email@examle.com" required>
+        </div>
+        <div><input class="ring-1 rounded-md mt-2 px-2 w-48 text-sm" title="" name="password" type="password" required></div>
+        <input type="hidden" name="next" value="{{ request.GET.next }}"/>
+        <div>
+            <button class="ring-2 rounded-md px-4 py-1 text-sm mt-4" type="submit" class="btn login-btn">Login</button>
+        </div>
+             
+    </form>
+        <div class="text-sm mt-4 text-gray-800">
+        {% if messages %}
+            <ul class="messages">
+                {% for message in messages %}
+                <li>{% if message.tags %} <li class="{{ message.tags }}">{% endif %}{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+
+        {% if form.errors %}
+            {% for field in form %}
+                {% for error in field.errors %}
+                    <div class="alert alert-danger">
+                    <strong>{{ error|escape }}</strong>
+                    </div>
+                {% endfor %}
+            {% endfor %}
+            {% for error in form.non_field_errors %}
+                <div class="alert alert-danger">
+                <strong>{{ error|escape }}</strong>
+                </div>
+            {% endfor %}
+        {% endif %}
+        </div>
+    </div> {% endcomment %}
+</div>
+{% endblock body %}

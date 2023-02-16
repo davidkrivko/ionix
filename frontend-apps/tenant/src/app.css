@@ -1,0 +1,70 @@
+/* Write your global styles here, in PostCSS syntax */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+.sync {
+    background: #f7f7f7;
+    border: 0px;
+    border-radius: 10px;
+    -moz-box-shadow: -9px -9px 16px #ffffff, 9px 9px 16px rgba(0, 0, 0, 0.1);
+    -ms-box-shadow: -9px -9px 16px #ffffff, 9px 9px 16px rgba(0, 0, 0, 0.1);
+    -webkit-box-shadow: -9px -9px 16px #ffffff, 9px 9px 16px rgba(0, 0, 0, 0.1);
+    box-shadow: -9px -9px 16px #ffffff, 9px 9px 16px rgba(0, 0, 0, 0.1);
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    color: #999999;
+    font-size: 1em;
+    margin: 1em;
+    height: 4em;
+    width: 10em;
+    -moz-transition: ease-in-out 0.2s;
+    -ms-transition: ease-in-out 0.2s;
+    -webkit-transition: ease-in-out 0.2s;
+    transition: ease-in-out 0.2s;
+  }
+  .sync {
+    -moz-transition: ease-in-out 0.2s;
+    -ms-transition: ease-in-out 0.2s;
+    -webkit-transition: ease-in-out 0.2s;
+    transition: ease-in-out 0.2s;
+  }
+  .sync.active {
+    background: #e4f4e7;
+    color: #355864;
+    border: 0px;
+    border-radius: 10px;
+    -moz-box-shadow: inset -4px -4px 8px rgba(255, 255, 255, 0.3), inset 4px 4px 8px rgba(0, 0, 0, 0.1);
+    -ms-box-shadow: inset -4px -4px 8px rgba(255, 255, 255, 0.3), inset 4px 4px 8px rgba(0, 0, 0, 0.1);
+    -webkit-box-shadow: inset -4px -4px 8px rgba(255, 255, 255, 0.3), inset 4px 4px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: inset -4px -4px 8px rgba(255, 255, 255, 0.3), inset 4px 4px 8px rgba(0, 0, 0, 0.1);
+
+    font-weight: bold;
+  }
+  .sync.rotating i {
+    font-size: 1.8em;
+    animation-name: spin;
+    animation-duration: 2s;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+  }
+  .sync.active span {
+    font-size: 0.8em;
+  }
+
+
+@keyframes spin {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+  

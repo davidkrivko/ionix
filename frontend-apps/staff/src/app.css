@@ -1,0 +1,119 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,300;0,400;0,700;1,600&display=swap');
+
+/* Write your global styles here, in PostCSS syntax */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+:root {
+--light: #edf2f9;
+--dark: #152e4d;
+--darker: #12263f;
+
+--pimary-focus: #3d73dd;
+--primary-blue: #536de6;
+--secondary-green: #35b8e0;
+}
+
+body {
+    color: rgb(108, 117, 125);
+    background-color: rgb(250, 251, 254);
+    font-family: "Nunito", "sans-serif";
+    padding: 0;
+    margin: 0;
+}
+a, li, .menu-item {
+    transition: color 1s;
+}
+a:hover, li:hover, .menu-item:hover {
+    color: var(--pimary-focus);
+}
+
+button {
+  flex-shrink: 0;
+}
+.btn-primary {
+    color: var(--primary-blue);
+    border-color: var(--primary-blue);
+    border: solid 1px;
+    border-radius: 2px;
+}
+
+.btn-secondary {
+    color: var(--secondary-green);
+    border-color: var(--secondary-green);
+    border: solid 1px;
+    border-radius: 2px;
+}
+
+.error {
+  border: 2px solid rgb(206, 23, 23);
+}
+
+.sync {
+    background: #f7f7f7;
+    border: 0px;
+    border-radius: 10px;
+    -moz-box-shadow: -9px -9px 16px #ffffff, 9px 9px 16px rgba(0, 0, 0, 0.1);
+    -ms-box-shadow: -9px -9px 16px #ffffff, 9px 9px 16px rgba(0, 0, 0, 0.1);
+    -webkit-box-shadow: -9px -9px 16px #ffffff, 9px 9px 16px rgba(0, 0, 0, 0.1);
+    box-shadow: -9px -9px 16px #ffffff, 9px 9px 16px rgba(0, 0, 0, 0.1);
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    color: #999999;
+    font-size: 1em;
+    margin: 1em;
+    height: 4em;
+    width: 10em;
+    -moz-transition: ease-in-out 0.2s;
+    -ms-transition: ease-in-out 0.2s;
+    -webkit-transition: ease-in-out 0.2s;
+    transition: ease-in-out 0.2s;
+  }
+  
+  .sync {
+    -moz-transition: ease-in-out 0.2s;
+    -ms-transition: ease-in-out 0.2s;
+    -webkit-transition: ease-in-out 0.2s;
+    transition: ease-in-out 0.2s;
+  }
+  .sync.active {
+    background: #e4f4e7;
+    color: #355864;
+    border: 0px;
+    border-radius: 10px;
+    -moz-box-shadow: inset -4px -4px 8px rgba(255, 255, 255, 0.3), inset 4px 4px 8px rgba(0, 0, 0, 0.1);
+    -ms-box-shadow: inset -4px -4px 8px rgba(255, 255, 255, 0.3), inset 4px 4px 8px rgba(0, 0, 0, 0.1);
+    -webkit-box-shadow: inset -4px -4px 8px rgba(255, 255, 255, 0.3), inset 4px 4px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: inset -4px -4px 8px rgba(255, 255, 255, 0.3), inset 4px 4px 8px rgba(0, 0, 0, 0.1);
+
+    font-weight: bold;
+  }
+  .sync.rotating i {
+    font-size: 1.8em;
+    animation-name: spin;
+    animation-duration: 2s;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+  }
+  .sync.active span {
+    font-size: 0.8em;
+  }
+
+
+
+@keyframes spin {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+  

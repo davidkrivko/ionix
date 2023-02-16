@@ -1,0 +1,222 @@
+/* @import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,300;0,400;0,700;1,600&display=swap'); */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+@import url('https://netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css');
+/* Write your global styles here, in PostCSS syntax */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+:root {
+--light: #edf2f9;
+--dark: #152e4d;
+--darker: #12263f;
+
+--pimary-focus: #3d73dd;
+--primary-blue: #536de6;
+--secondary-green: #35b8e0;
+}
+
+body {
+    color: rgb(117, 124, 129);
+    background: #E0EAFC;  /* fallback for old browsers */
+    background: -webkit-linear-gradient(to right, #CFDEF3, #E0EAFC);  /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to right, #CFDEF3, #E0EAFC); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */    
+    font-family: "Poppins", "sans-serif", -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
+    Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    padding: 0;
+    margin: 0;
+}
+
+input + label {
+  cursor: pointer;
+}
+/* Custom checkboxes */
+/*** custom checkboxes ***/
+
+input[type=checkbox] { display:none; } /* to hide the checkbox itself */
+input[type=checkbox] + label:before {
+  font-family: FontAwesome;
+  display: inline-block;
+  pointer-events: fill;
+}
+
+input[type=checkbox] + label:before { content: "\f096"; } /* unchecked icon */
+input[type=checkbox] + label:before { letter-spacing: 10px; } /* space between checkbox and label */
+
+input[type=checkbox]:checked + label:before { content: "\f046"; } /* checked icon */
+input[type=checkbox]:checked + label:before { letter-spacing: 5px; } /* allow space for check mark */
+
+a, li, .menu-item {
+    transition: color 1s;
+}
+a:hover, li:hover, .menu-item:hover {
+    color: var(--pimary-focus);
+}
+
+button {
+  flex-shrink: 0;
+  color: black;
+  transition: all 0.5s;
+}
+
+
+.btn-primary {background-image: linear-gradient(to right, #4CB8C4 0%, #3CD3AD  51%, #4CB8C4  100%)}
+.btn-primary {
+   text-align: center;
+   text-transform: uppercase;
+   transition: 0.5s;
+   background-size: 200% auto;
+   color: white;            
+   box-shadow: 0 0 20px #eee;
+   border-radius: 10px;
+   display: block;
+ }
+
+ .btn-primary:hover {
+   background-position: right center; /* change the direction of the change here */
+   color: #fff;
+   text-decoration: none;
+ }
+
+ .btn-secondary {background-image: linear-gradient(to right, #1FA2FF 0%, #12D8FA  51%, #1FA2FF  100%)}
+ .btn-secondary {
+    text-align: center;
+    text-transform: uppercase;
+    transition: 0.5s;
+    background-size: 200% auto;
+    color: white;            
+    box-shadow: 0 0 20px #eee;
+    border-radius: 10px;
+    display: block;
+  }
+
+  .btn-secondary:hover {
+    background-position: right center; /* change the direction of the change here */
+    color: #fff;
+    text-decoration: none;
+  }
+ 
+  .btn-seconday:hover {
+    background-position: right center; /* change the direction of the change here */
+    color: #fff;
+    text-decoration: none;
+  }
+
+
+
+  .btn-tertiary {background-image: linear-gradient(to right, #fd746c 0%, #ff9068  51%, #fd746c  100%)}
+  .btn-tertiary {
+     text-align: center;
+     text-transform: uppercase;
+     transition: 0.5s;
+     background-size: 200% auto;
+     color: white;            
+     box-shadow: 0 0 20px #eee;
+     border-radius: 10px;
+     display: block;
+   }
+
+   .btn-tertiary:hover {
+     background-position: right center; /* change the direction of the change here */
+     color: #fff;
+     text-decoration: none;
+   }
+  
+
+.error {
+  border: 1px solid rgb(187, 53, 53);
+  box-shadow: none;
+}
+
+.error-box {
+  /* padding-bottom: 0rem; */
+  -webkit-box-shadow: 0px 11px 6px -8px rgb(187, 53, 53, 0.42);
+  -moz-box-shadow: 0px 11px 6px -8px rgb(187, 53, 53,  0.42);
+  box-shadow: 0px 11px 6px -8px rgb(187, 53, 53,  0.42);
+}
+
+.sync {
+    background: #f7f7f7;
+    border: 0px;
+    border-radius: 10px;
+    -moz-box-shadow: -9px -9px 16px #ffffff, 9px 9px 16px rgba(0, 0, 0, 0.1);
+    -ms-box-shadow: -9px -9px 16px #ffffff, 9px 9px 16px rgba(0, 0, 0, 0.1);
+    -webkit-box-shadow: -9px -9px 16px #ffffff, 9px 9px 16px rgba(0, 0, 0, 0.1);
+    box-shadow: -9px -9px 16px #ffffff, 9px 9px 16px rgba(0, 0, 0, 0.1);
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    color: #999999;
+    font-size: 1em;
+    margin: 1em;
+    height: 4em;
+    width: 10em;
+    -moz-transition: ease-in-out 0.2s;
+    -ms-transition: ease-in-out 0.2s;
+    -webkit-transition: ease-in-out 0.2s;
+    transition: ease-in-out 0.2s;
+  }
+  
+  .sync {
+    -moz-transition: ease-in-out 0.2s;
+    -ms-transition: ease-in-out 0.2s;
+    -webkit-transition: ease-in-out 0.2s;
+    transition: ease-in-out 0.2s;
+  }
+  .sync.active {
+    background: #e4f4e7;
+    color: #355864;
+    border: 0px;
+    border-radius: 10px;
+    -moz-box-shadow: inset -4px -4px 8px rgba(255, 255, 255, 0.3), inset 4px 4px 8px rgba(0, 0, 0, 0.1);
+    -ms-box-shadow: inset -4px -4px 8px rgba(255, 255, 255, 0.3), inset 4px 4px 8px rgba(0, 0, 0, 0.1);
+    -webkit-box-shadow: inset -4px -4px 8px rgba(255, 255, 255, 0.3), inset 4px 4px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: inset -4px -4px 8px rgba(255, 255, 255, 0.3), inset 4px 4px 8px rgba(0, 0, 0, 0.1);
+
+    font-weight: bold;
+  }
+  .sync.rotating i {
+    font-size: 1.8em;
+    animation-name: spin;
+    animation-duration: 2s;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+  }
+  .sync.active span {
+    font-size: 0.8em;
+  }
+
+  .slider-theme {
+    --range-range: #458796;
+    --range-handle: #458796;
+    --range-handle-focus: #458796;
+    --range-handle-inactive: #458796;
+    /* --slider: rgba(59 130 246 ); */
+}
+  .select-theme {
+  --listZIndex: 4;
+  }
+
+.rangeFloat {
+  opacity: 1!important;
+}
+@responsive {
+  .boiler-grid-md {
+    grid-template-columns: 12rem 3rem 10rem auto;
+  }
+}
+
+@keyframes spin {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+  

@@ -1,0 +1,167 @@
+.thermostat {
+  position: relative;
+  width: 200px;
+  height: 200px;
+  background: #F2F2F2;
+  border-radius: 50%;
+  box-shadow: 0px 0px 1rem rgba(0, 0, 0, 0.8);
+}
+
+.thermostat .control {
+  position: absolute;
+  z-index: 5;
+  width: 130px;
+  height: 130px;
+  top: 25%;
+  left: 35px;
+  background: #E6E6E6;
+  border-radius: 50%;
+  box-shadow: 0 0 1rem rgba(0, 0, 0, 0.7);
+}
+.thermostat .control .temp_outside {
+  position: absolute;
+  top: 25px;
+  left: 6px;
+  right: 0;
+  text-align: center;
+  font-weight: 300;
+  font-size: 1rem;
+}
+.thermostat .control .temp_room {
+  position: absolute;
+  top: 34px;
+  left: 0;
+  right: 0;
+  text-align: center;
+  font-weight: 400;
+  font-size: 60px;
+  line-height: 60px;
+  color: #873183;
+  letter-spacing: -8px;
+  padding-right: 12px;
+  opacity: 1;
+  transform: translateX(0);
+  transition: all .5s ease-in-out;
+}
+.thermostat .control .temp_room span {
+  position: absolute;
+  top: 0;
+  right: 37px;
+  font-size: 2rem;
+  line-height: 34px;
+  padding: 3px 0 0 7px;
+	color: #8e2275;
+}
+.indicator {
+  position: absolute;
+  top: 98px;
+  left: 56px;
+  cursor: pointer;
+  z-index: 50;
+}
+/* .room {
+  position: absolute;
+  bottom: 18px;
+  left: 0;
+  right: 0;
+  text-align: center;
+  font-weight: 300;
+  font-size: 1rem;
+} */
+.thermostat .ring {
+  position: absolute;
+  width: 180px;
+  height: 180px;
+  top: 10px;
+  left: 10px;
+  border-radius: 50%;
+
+  background: rgb(188,191,214);
+  background: radial-gradient(circle, rgba(188,191,214,1) 0%, rgba(54,54,55,1) 100%);
+  box-shadow: inset 2px 4px 4px 0px rgba(0, 0, 0, 0.3);
+}
+.thermostat .ring-active {
+  background: #6677bf;
+  background: linear-gradient(
+    80deg,#163f5e,#412b7694 19%,#7f85c7 40%,#6677bf 63%,#2b1e72ba);
+}
+.thermostat .ring-hot {
+  background: rgb(255,184,50);
+  background: radial-gradient(circle,#ff4132d9 0,#964600b8 100%);
+}
+.thermostat .ring .bottom_overlay {
+  position: absolute;
+  width: 95px;
+  height: 95px;
+  top: 50%;
+  left: 50%;
+  background: #F2F2F2;
+  transform-origin: 0 0;
+  transform: rotate(45deg);
+  border-radius: 0 0 95px 0;
+}
+
+
+#slider {
+  height: 72px;
+  width: 144px;
+  position: absolute;
+  z-index: 50;
+  top: 48px;
+  left: 28px;
+}
+/* SLIDER SETT */
+/* 
+#slider {
+	position: absolute;
+	width: 170px;
+	height: 150px;
+	top: 36%;
+	left: 32%;
+	z-index: 1000;
+}*/
+
+#slider .rs-border  {
+    border-color: transparent;
+}
+.rs-control .rs-range-color, .rs-control .rs-path-color, .rs-control .rs-bg-color {
+    background-color: rgba(209, 89, 89, 0);
+}
+.rs-control .rs-handle {
+    background-color: #f7f7f7;
+    /* opacity: 0.7; */
+    box-shadow: -1px 0px 30px -1px rgba(0,0,0,0.75) inset;
+    -webkit-box-shadow: -1px 0px 0.5rem -1px rgba(0,0,0,0.75) inset;
+    -moz-box-shadow: -1px 0px 0.5rem -1px rgba(0,0,0,0.75) inset;
+}
+.rs-tooltip.edit, .rs-tooltip .rs-input, .rs-tooltip-text {
+	font-family: 'cairo', helvetica, sans-serif;
+	font-size: 2.5rem;
+	background: transparent;
+	color: #8e2275;
+	font-weight: 400;
+	top: 2.5rem;
+	height: 3.9rem;
+	padding: 0 !important;
+  margin-left: -0.5rem!important;
+	width: 4.5rem;
+}
+.rs-half.rs-top .rs-tooltip {
+  left: 2.5rem!important;
+}
+#slider:hover .rs-tooltip, .rs-tooltip:focus, .rs-tooltip-text:focus {
+	border: none;
+	transform: scale(1.1);
+	transition: .1s;
+} 
+#slider .rs-transition  {
+  transition-timing-function: cubic-bezier(1.000, -0.530, 0.405, 1.425);
+}
+/* #slider .rs-transition  {
+  transition-timing-function: cubic-bezier(1.000, -0.530, 0.405, 1.425);
+} */
+@keyframes pulse {
+	50% {
+		transform: scale(.9);
+	}
+}

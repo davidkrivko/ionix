@@ -1,0 +1,33 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+django = "*"
+django-cors-headers = "*"
+django-filter = "*"
+django-hosts = "*"
+django-phonenumber-field = {extras = ["phonenumbers"], version = "*"}
+django-q = "*"
+django-redis = "*"
+hiredis = "*"
+django-storages = "*"
+django-user-visit = "*"
+djangorestframework-simplejwt = "*"
+djangorestframework = "*"
+pandas = "*"
+requests = "*"
+psycopg2-binary = "*"
+django-ebhealthcheck = "*"
+drf-yasg = "*"
+sqlalchemy = "*"
+scipy = "*"
+pillow = "*"
+loguru = "*"
+gunicorn = "*"
+
+[dev-packages]
+
+[requires]
+python_version = "3.8"

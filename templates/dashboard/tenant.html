@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extrahead %}
+    <script type="module" crossorigin src="{% static 'tenant/index.js' %}"></script>
+    <link rel="modulepreload" href="{% static 'tenant/vendor.js' %}">
+    <link rel="stylesheet" href="{% static 'tenant/index.css' %}">
+    <link rel="stylesheet" href="{% static 'tenant/vendor.css' %}">
+{% endblock extrahead %}
+
+{% block body %}
+
+    <div id="app">
+
+    </div>
+
+{% endblock body %}
