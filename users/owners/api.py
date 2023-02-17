@@ -150,7 +150,6 @@ class OwnerRoomsListApiView(ListAPIView):
         except:
             queryset = RoomModel.objects.none()
         return queryset
-            
 
         
 class OwnersTenantsApiListView(ListCreateAPIView):
@@ -160,7 +159,7 @@ class OwnersTenantsApiListView(ListCreateAPIView):
 
     def get_queryset(self):
 
-        #Query params
+        # Query params
         guests = self.request.GET.get('guests')
         apartment_id = self.request.GET.get('apartment_id')
         
@@ -205,7 +204,6 @@ class OwnersTenantsApiListView(ListCreateAPIView):
         user_id = urlsafe_base64_encode(force_bytes(user.pk))
         url = CURRENT_SITE + reverse('guest-page', kwargs={'user_id': user_id, 'token': token})
         serializer.save(owner=self.request.user.owner, user=user, access_link=url)
-
 
 
 class DeleteTenantApiView(APIView):

@@ -60,6 +60,17 @@ MIDDLEWARE = [
     "django_hosts.middleware.HostsResponseMiddleware",
 ]
 
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': os.environ['RDS_DB_NAME'],
+        'USER': os.environ['RDS_USERNAME'],
+        'PASSWORD': os.environ['RDS_PASSWORD'],
+        'HOST': os.environ['RDS_HOSTNAME'],
+        'PORT': os.environ['RDS_PORT'],
+        }
+}
+
 ROOT_HOSTCONF = "ioniqbox.hosts"
 ROOT_URLCONF = "ioniqbox.urls"
 DEFAULT_HOST = "app"
