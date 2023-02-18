@@ -13,7 +13,7 @@ Activate environment:
 
 Run Django
 
-``
+`./manage.py runserver`
 
 Staging env: panels-staging.turnonheat.com
              ioadmin-staging.turnonheat.com
