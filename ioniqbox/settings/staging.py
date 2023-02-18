@@ -18,6 +18,7 @@ ALLOWED_HOSTS = [
 
 CORS_ALLOWED_ORIGINS = ['https://app.turnonheat.com']
 
+ROOT_URLCONF = "ioniqbox.urls"
 
 
 REDIS_HOST = os.environ.get("REDIS_HOST")
