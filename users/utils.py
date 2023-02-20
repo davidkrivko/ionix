@@ -3,14 +3,11 @@ from users.models import TenantProfileModel
 import logging
 from users.owners.api import CURRENT_SITE
 from users.tokens import password_reset_tokenizer
-from django.utils.encoding import force_bytes
-from django.utils.http import urlsafe_base64_encode
 from django.contrib.auth import get_user_model
 from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode
 from django.conf import settings
 
-from django_q.tasks import async_task
 from django.urls import reverse
 
 User = get_user_model()

@@ -13,12 +13,13 @@ ALLOWED_HOSTS = [
     'api-staging.turnonheat.com',
     'ioadmin-staging.turnonheat.com',
     'panel-staging.turnonheat.com',
-    '142.93.113.255',
+    'api-do.147.182.140.74',
+    'admin-do.147.182.140.74',
+    'panel-do.147.182.140.74',
 ]
 
 CORS_ALLOWED_ORIGINS = ['https://app.turnonheat.com']
 
-ROOT_URLCONF = "ioniqbox.urls"
 
 
 REDIS_HOST = os.environ.get("REDIS_HOST")
