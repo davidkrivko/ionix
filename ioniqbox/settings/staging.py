@@ -13,11 +13,12 @@ ALLOWED_HOSTS = [
     'api-staging.turnonheat.com',
     'ioadmin-staging.turnonheat.com',
     'panel-staging.turnonheat.com',
-    '147.182.140.74',
+    'admin-do.ionix-staging.com',
+    'panel-do.ionix-staging.com',
+    'api-do.ionix-staging.com',
 ]
 
 CORS_ALLOWED_ORIGINS = ['https://app.turnonheat.com']
-
 
 
 REDIS_HOST = os.environ.get("REDIS_HOST")
@@ -52,8 +53,7 @@ CACHES = {
 }
 
 
-
-#ASYNC BACKGROUND TASKS
+# ASYNC BACKGROUND TASKS
 Q_CLUSTER = {
     'name': 'IoniqboxAsyncQueue',
     'timeout': 90,
