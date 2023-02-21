@@ -19,8 +19,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent.parent
 # Application definition
 
 ALLOWED_HOSTS = [
-    "*"
+    'admin-do.ionix-staging.com',
+    'panel-do.ionix-staging.com',
+    'api-do.ionix-staging.com',
 ]
+
+CORS_ALLOWED_ORIGINS = ['https://app-do.ionix-staging.com']
+
 
 INSTALLED_APPS = [
     "django.contrib.admin",
@@ -186,3 +191,25 @@ DEVICE_ONLINE_STATUS_DELTA_SEC = 10
 
 # REDIS STREAM SETTINGS
 REDIS_STREAM_MAX_LEN = 21600
+
+Q_CLUSTER = {
+    'name': 'IoniqboxAsyncQueue',
+    'timeout': 90,
+    'retry': 120,
+    'django_redis': 'queue',
+}
+
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'mail.ioniqbox.com'
+EMAIL_USE_TLS = True
+EMAIL_PORT = 587
+EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
+# ADD DEFAULT EMAIL
+DEFAULT_FROM_EMAIL = "alert@ioniqbox.com"
+DEFAULT_ADMIN_EMAIL = "admin@twinkle.nyc"
+
+
+CORS_ALLOW_ALL_ORIGINS = True
+
