@@ -24,7 +24,7 @@ ALLOWED_HOSTS = [
     'api-do.ionix-staging.com',
 ]
 
-CORS_ALLOWED_ORIGINS = ['https://app-do.ionix-staging.com']
+CORS_ALLOWED_ORIGINS = ['https://panel-do.ionix-staging.com']
 
 
 INSTALLED_APPS = [
