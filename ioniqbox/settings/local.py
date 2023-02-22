@@ -11,6 +11,7 @@ DEBUG = True
 
 
 # Local development
+ALLOWED_HOSTS = ["*"]
 
 
 REDIS_HOST = os.environ.get("REDIS_HOST")
@@ -39,12 +40,6 @@ CACHES = {
         "OPTIONS": {"CONNECTION_POOL_KWARGS": {"max_connections": 50}},
     },
 }
-
-# IOT POSTGRES
-IOT_DB_NAME = os.environ.get("IOT_POSTGRES_DB")
-IOT_DB_USER = os.environ.get("IOT_POSTGRES_USERNAME")
-IOT_DB_PASSWORD = os.environ.get("IOT_POSTGRES_PASSWORD")
-IOT_DB_HOST = os.environ.get("IOT_POSTGRES_HOST")
 
 
 # ASYNC BACKGROUND TASKS

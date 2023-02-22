@@ -11,6 +11,9 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 import os
 from pathlib import Path
+from dotenv import load_dotenv
+
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
@@ -18,9 +21,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
 # Application definition
 
-ALLOWED_HOSTS = [
-    "*"
-]
+CORS_ALLOWED_ORIGINS = ['https://panel-do.ionix-staging.com']
+
 
 INSTALLED_APPS = [
     "django.contrib.admin",
@@ -65,6 +67,7 @@ MIDDLEWARE = [
     "django_hosts.middleware.HostsResponseMiddleware",
 ]
 
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
@@ -75,6 +78,7 @@ DATABASES = {
         'PORT': os.environ.get('RDS_PORT'),
         }
 }
+
 
 ROOT_HOSTCONF = "ioniqbox.hosts"
 ROOT_URLCONF = "ioniqbox.urls"
@@ -158,7 +162,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
 STATIC_URL = "/static/"
-STATIC_ROOT = os.path.join(BASE_DIR, "static/")
+STATIC_ROOT = os.path.join(BASE_DIR, "static")
 
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "apps"),
@@ -186,3 +190,25 @@ DEVICE_ONLINE_STATUS_DELTA_SEC = 10
 
 # REDIS STREAM SETTINGS
 REDIS_STREAM_MAX_LEN = 21600
+
+Q_CLUSTER = {
+    'name': 'IoniqboxAsyncQueue',
+    'timeout': 90,
+    'retry': 120,
+    'django_redis': 'queue',
+}
+
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'mail.ioniqbox.com'
+EMAIL_USE_TLS = True
+EMAIL_PORT = 587
+EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
+# ADD DEFAULT EMAIL
+DEFAULT_FROM_EMAIL = "alert@ioniqbox.com"
+DEFAULT_ADMIN_EMAIL = "admin@twinkle.nyc"
+
+
+CORS_ALLOW_ALL_ORIGINS = True
+
