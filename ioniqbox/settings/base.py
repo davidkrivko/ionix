@@ -18,12 +18,6 @@ BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
 # Application definition
 
-ALLOWED_HOSTS = [
-    'admin-do.ionix-staging.com',
-    'panel-do.ionix-staging.com',
-    'api-do.ionix-staging.com',
-]
-
 CORS_ALLOWED_ORIGINS = ['https://panel-do.ionix-staging.com']
 
 
@@ -70,6 +64,7 @@ MIDDLEWARE = [
     "django_hosts.middleware.HostsResponseMiddleware",
 ]
 
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
@@ -80,6 +75,7 @@ DATABASES = {
         'PORT': os.environ.get('RDS_PORT'),
         }
 }
+
 
 ROOT_HOSTCONF = "ioniqbox.hosts"
 ROOT_URLCONF = "ioniqbox.urls"
@@ -163,7 +159,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
 STATIC_URL = "/static/"
-STATIC_ROOT = os.path.join(BASE_DIR, "static/")
+STATIC_ROOT = os.path.join(BASE_DIR, "static")
 
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "apps"),

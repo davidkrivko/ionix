@@ -49,7 +49,7 @@ CACHES = {
         "OPTIONS": {
             "CONNECTION_POOL_KWARGS": {"max_connections": 50}
         }
-    },   
+    },
 }
 
 

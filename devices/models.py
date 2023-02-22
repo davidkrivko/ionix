@@ -1,7 +1,5 @@
 from datetime import time
-import imp
 from django.db import models
-from streams.daos import RedisDao
 from .choices import (
     PIN_CHOICES,
     ZONE_PIN_CHOICES,
