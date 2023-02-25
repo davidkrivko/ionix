@@ -20,7 +20,7 @@ class CustomUserChangeForm(UserChangeForm):
 
 class LoginForm(forms.Form):
 
-    email = forms.EmailField()
+    username = forms.EmailField()
     password = forms.CharField()
 
 class ResetRequestForm(forms.Form):

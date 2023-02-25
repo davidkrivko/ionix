@@ -7,15 +7,15 @@ from .exceptions import (
     NoAuthToken,
     InvalidAuthToken,
 )
+
 User = get_user_model()
 
 
-
 class ServiceTokenAuthentication(BaseAuthentication):
-    
+
     def authenticate(self, request):
         auth_header = request.headers.get("Authorization")
-    
+
         if not auth_header:
             raise NoAuthToken("No auth token provided")
 

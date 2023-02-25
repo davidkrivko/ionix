@@ -23,8 +23,11 @@ CORS_ALLOWED_ORIGINS = ['https://app.turnonheat.com']
 
 REDIS_HOST = os.environ.get("REDIS_HOST")
 REDIS_PORT = os.environ.get("REDIS_PORT")
+REDIS_NAME = os.environ.get("REDIS_NAME")
+REDIS_PASSWORD = os.environ.get("REDIS_PASSWORD")
 
-REDIS_LOCATION_STRING = f"redis://{REDIS_HOST}:{REDIS_PORT}"
+REDIS_LOCATION_STRING = f"rediss://{REDIS_NAME}:{REDIS_PASSWORD}@{REDIS_HOST}:{REDIS_PORT}"
+
 
 CACHES = {
     'default': {
@@ -35,9 +38,7 @@ CACHES = {
         "LOCATION": REDIS_LOCATION_STRING + "/0",
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
-        },
-        "OPTIONS": {
-            "CONNECTION_POOL_KWARGS": {"max_connections": 100}
+            "CONNECTION_POOL_KWARGS": {"max_connections": 100},
         }
     },
     "streams": {
@@ -45,9 +46,7 @@ CACHES = {
         "LOCATION": REDIS_LOCATION_STRING + "/1",
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
-        },
-        "OPTIONS": {
-            "CONNECTION_POOL_KWARGS": {"max_connections": 50}
+            "CONNECTION_POOL_KWARGS": {"max_connections": 50},
         }
     },
 }
