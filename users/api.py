@@ -38,7 +38,7 @@ class ProfileDataApiView(APIView):
                 "is_landlord": owner.is_landlord,
                 "first_name": owner.first_name,
                 "nickname": owner.nickname,
-                "phone_number": owner.phone_number,
+                "phone_number": str(owner.phone_number),
                 "logo": logo,
                 # "boiler_id": boiler.pk,
             }
