@@ -15,9 +15,7 @@ ALLOWED_HOSTS = [
     'app.turnonheat.com',
     'ioadmin.turnonheat.com',
     'panel.turnonheat.com',
-    'do-api.turnonheat.com',
-    'admin.turnonheat.com',
-    'do.turnonheat.com',
+
     ]
 
 
