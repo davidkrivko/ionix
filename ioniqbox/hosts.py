@@ -12,7 +12,7 @@ host_patterns = patterns(
     host('ioadmin-staging', 'users.urls_admin', name="admin-staging"),
     host('panel-staging', 'users.urls', name="user-area-staging"),
 
-    host('api-do', 'external.api_urls', name='api-digital-ocean'),
-    host('admin-do', 'users.urls_admin', name='admin-digital-ocean'),
-    host('panel-do', 'users.urls', name='panel-digital-ocean'),
+    host('do-api', 'external.api_urls', name='api-digital-ocean'),
+    host('admin', 'users.urls_admin', name='admin-digital-ocean'),
+    host('do', 'users.urls', name='panel-digital-ocean'),
 )
