@@ -13,6 +13,7 @@ import { Link as RouterLink, useLocation } from 'react-router-dom';
 import axios from '../../../utils/axios';
 import { determiteOnlineStatus, getCsrfToken } from '../../../utils/thermostats';
 
+import ThermostatEditDialog from './ThermostatEditDialog';
 import ControllerDialog from './ControllerDialog';
 import ScheduleEventDialog from './SettingDialog';
 
@@ -65,6 +66,7 @@ export default function ZoneDetail() {
   const thermostat = location.state;
 
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
+  const [name, setName] = useState(thermostat.name);
   const [point, setPoint] = useState(thermostat.set_temperature);
   const [sensorTemp, setSensorTemp] = useState(0);
   const [onlineStatus, setOnlineStatus] = useState('offline');
@@ -73,6 +75,10 @@ export default function ZoneDetail() {
   useEffect(() => {
     getThermostatData();
   }, []);
+
+  const handleName = (value) => {
+    setName(value);
+  }
 
   const getThermostatData = async () => {
     const endPoint = `/api/devices/v2/thermostat/data/${thermostat.serial_num}/`;
@@ -128,7 +134,18 @@ export default function ZoneDetail() {
         <Typography variant="span" sx={{ fontSize: '16px' }}>
           IONIQ Thermostat
         </Typography>
-        <Typography sx={{ fontWeight: '700', flexGrow: 1 }}>{thermostat.name}</Typography>
+        <Box
+          sx={{
+            display: 'flex',
+            flexDirection: 'row',
+            columnGap: '2px',
+            justifyContent: 'flex-start',
+            alignItems: 'center'
+          }}
+        >
+          <Typography sx={{ fontWeight: '700', flexGrow: 1 }}>{thermostat.name}</Typography>
+          <ThermostatEditDialog thermostat={thermostat} onSubmit={handleName} />
+        </Box>
       </Box>
       <Box>
         <Grid container spacing={2}>
@@ -189,7 +206,7 @@ export default function ZoneDetail() {
         <Button variant="contained" size="small" onClick={updateSetPoint}>
           Save
         </Button>
-        <Button variant="outlined" size="small" component={RouterLink} to="/dashboard/app">
+        <Button variant="outlined" size="small" component={RouterLink} to="/app">
           Back
         </Button>
       </Box>
