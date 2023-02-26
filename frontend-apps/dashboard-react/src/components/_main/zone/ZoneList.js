@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
+import { useState } from 'react';
 // material
-import { Box, Button, OutlinedInput } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 
 import ZoneItem from './ZoneItem';
-// ----------------------------------------------------------------------
+import ZoneEditDialog from './ZoneEditDialog';
 
 // ----------------------------------------------------------------------
 
@@ -13,13 +13,13 @@ ZoneList.propTypes = {
   index: PropTypes.number
 };
 
-export default function ZoneList({ zone, index }) {
-  const [edit, setEdit] = useState(false);
+export default function ZoneList({ zone }) {
   const [name, setName] = useState(zone.name);
 
-  const handleName = (e) => {
-    setName(e.target.value);
-  };
+  const handleName = (value) => {
+    setName(value);
+  }
+
   return (
     <Box
       sx={{
@@ -29,35 +29,20 @@ export default function ZoneList({ zone, index }) {
         rowGap: '5px'
       }}
     >
-      {/* <Typography variant="body1" fontWeight="bold">
-        {zone.name}
-      </Typography> */}
-      {edit ? (
-        <OutlinedInput
-          value={name}
-          onChange={(e) => handleName(e)}
-          sx={{
-            '& input': {
-              padding: '7px 14px'
-            }
-          }}
-        />
-      ) : (
-        <Button
-          variant="text"
-          onClick={() => setEdit(true)}
-          sx={{
-            fontSize: '16px',
-            color: '#000',
-            padding: 0,
-            justifyContent: 'flex-start',
-            '&:hover': { backgroundColor: '#fff', boxShadow: 'none' }
-          }}
-        >
-          {zone.name}
-        </Button>
-      )}
-
+      <Box
+        sx={{
+          display: 'flex',
+          flexDirection: 'row',
+          columnGap: '2px',
+          justifyContent: 'flex-start',
+          alignItems: 'center'
+        }}
+      >
+        <Typography variant="body1" fontWeight="bold">
+          {name}
+        </Typography>
+        <ZoneEditDialog zone={zone} onSubmit={handleName} />
+      </Box>
       <Box sx={{ display: 'flex', flexDirection: 'column', rowGap: '10px' }}>
         {zone.thermostats.map((thermostat, index) => {
           return <ZoneItem thermostat={thermostat} key={index} />;

@@ -55,7 +55,7 @@ export default function ZoneItem({ thermostat }) {
       variant="outlined"
       fullWidth
       component={RouterLink}
-      to="/dashboard/detail"
+      to="/detail"
       state={thermostat}
       sx={{
         minWidth: '300px',
