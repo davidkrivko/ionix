@@ -14,8 +14,8 @@ ALLOWED_HOSTS = [
     'ioadmin-staging.turnonheat.com',
     'panel-staging.turnonheat.com',
     'do-api.turnonheat.com',
-    'do-admin.turnonheat.com',
-    'do-app.turnonheat.com',
+    'admin.turnonheat.com',
+    'do.turnonheat.com',
 ]
 
 CORS_ALLOWED_ORIGINS = ['https://app.turnonheat.com']
