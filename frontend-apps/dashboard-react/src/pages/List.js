@@ -3,12 +3,11 @@ import React, { useState, useEffect } from 'react';
 import { Container, Stack } from '@mui/material';
 // components
 import Page from '../components/Page';
-import { ZoneList } from '../components/_main/zone';
+
 // utils
 import axios from '../utils/axios';
-//
-import ZONES from '../_mocks_/zone';
 
+import { ZoneList } from '../components/_main/zone';
 // ----------------------------------------------------------------------
 
 export default function List() {
@@ -58,8 +57,8 @@ export default function List() {
     <Page title="Dashboard: List | IONIC">
       <Container>
         <Stack direction="column" alignItems="center" spacing={2}>
-          {zones.map((zone, index) => (
-            <ZoneList key={zone.id} zone={zone} index={index} />
+          {zones.map((zone) => (
+            <ZoneList key={zone.id} zone={zone} />
           ))}
         </Stack>
       </Container>
