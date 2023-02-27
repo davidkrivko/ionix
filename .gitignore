@@ -283,7 +283,7 @@ node_modules/
 
 # Custom
 *.code-workspace
-static/
+# static/
 backup/
 v1/
 .idea
