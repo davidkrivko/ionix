@@ -1,6 +1,6 @@
 import { Navigate, useRoutes } from 'react-router-dom';
 // layouts
-import MainLayout from './layouts/main';
+import MainLayout from './layouts';
 //
 import List from './pages/List';
 import Detail from './pages/Detail';

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 // material
 import { Container, Stack, Card, Box, Button, Typography } from '@mui/material';
 import { Icon } from '@iconify/react';
@@ -8,15 +8,36 @@ import { useNavigate } from 'react-router-dom';
 // components
 import Page from '../components/Page';
 import { GeneralProfile, ChangePassword } from '../components/_main/profile';
-//
+// utils
+import axios from '../utils/axios';
 // ----------------------------------------------------------------------
 
 export default function Profile() {
   const navigate = useNavigate();
   const [showPassForm, setShowPassForm] = useState(false);
+  const [profile, setProfile] = useState(null);
+
+  useEffect(() => {
+    getUserData();
+  }, []);
 
   const goBack = () => {
     navigate(-1);
+  };
+
+  const getUserData = async () => {
+    const endPoint = `/api/users/me/`;
+    await axios
+      .get(endPoint)
+      .then((response) => {
+        console.log("response:", response);
+        if (response.status === 200) {
+          setProfile(response.data);
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   return (
@@ -45,7 +66,7 @@ export default function Profile() {
                 Profile Settings
               </Typography>
             </Box>
-            <GeneralProfile />
+            <GeneralProfile profile={profile} />
             <Box
               sx={{
                 display: 'flex',
