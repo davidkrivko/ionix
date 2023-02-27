@@ -1,4 +1,5 @@
 import * as Yup from 'yup';
+import PropTypes from 'prop-types';
 import { useState, useEffect } from 'react';
 import { useFormik, Form, FormikProvider } from 'formik';
 
@@ -23,16 +24,15 @@ const RootStyle = styled('div')({
   width: '100%'
 });
 // ----------------------------------------------------------------------
+GeneralProfile.propTypes = {
+  profile: PropTypes.object
+};
 
-export default function GeneralProfile() {
+export default function GeneralProfile({ profile }) {
+  console.log("profile:", profile);
   const isMountedRef = useIsMountedRef();
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
 
-  const [profile, setProfile] = useState({ first_name: '', email: '' });
-
-  useEffect(() => {
-    getUserData();
-  }, []);
   const ProfileSchema = Yup.object().shape({
     first_name: Yup.string().min(2, 'Too Short!').max(50, 'Too Long!').required('Name required'),
     email: Yup.string().email('Email must be a valid email address').required('Email is required')
@@ -40,8 +40,8 @@ export default function GeneralProfile() {
 
   const formik = useFormik({
     initialValues: {
-      first_name: profile.first_name || '',
-      email: profile.email || ''
+      first_name: profile ? profile.first_name : '',
+      email: profile ? profile.email : ''
     },
     validationSchema: ProfileSchema,
     onSubmit: async (values, { setErrors, setSubmitting }) => {
@@ -74,24 +74,6 @@ export default function GeneralProfile() {
   });
 
   const { errors, touched, handleSubmit, isSubmitting, getFieldProps } = formik;
-
-  const getUserData = async () => {
-    const endPoint = `/api/users/me/`;
-    await axios
-      .get(endPoint)
-      .then((response) => {
-        if (response.status === 200) {
-          setProfile((prevState) => ({
-            ...prevState,
-            name: response.data.first_name,
-            email: response.data.email
-          }));
-        }
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
 
   return (
     <RootStyle>

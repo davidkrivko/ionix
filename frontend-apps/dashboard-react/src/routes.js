@@ -1,6 +1,6 @@
 import { Navigate, useRoutes } from 'react-router-dom';
 // layouts
-import MainLayout from './layouts/main';
+import MainLayout from './layouts';
 //
 import List from './pages/List';
 import Detail from './pages/Detail';
@@ -16,8 +16,8 @@ export default function Router() {
       children: [
         { path: 'app', element: <List /> },
         { path: 'detail', element: <Detail /> },
-        { path: 'profile', element: <Profile /> },
+        { path: 'profile', element: <Profile /> }
       ]
-    },
+    }
   ]);
 }
