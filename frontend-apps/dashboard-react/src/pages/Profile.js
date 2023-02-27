@@ -30,9 +30,10 @@ export default function Profile() {
     await axios
       .get(endPoint)
       .then((response) => {
-        console.log("response:", response);
         if (response.status === 200) {
-          setProfile(response.data);
+          const data = response.data.data;
+          console.log("data:", data);
+          setProfile({ first_name: data.first_name, email: data.email });
         }
       })
       .catch((error) => {
