@@ -16,8 +16,8 @@ export default function Router() {
       children: [
         { path: 'app', element: <List /> },
         { path: 'detail', element: <Detail /> },
-        { path: 'profile', element: <Profile /> },
+        { path: 'profile', element: <Profile /> }
       ]
-    },
+    }
   ]);
 }

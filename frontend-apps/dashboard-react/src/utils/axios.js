@@ -2,7 +2,7 @@ import axios from 'axios';
 
 // ----------------------------------------------------------------------
 
-const axiosInstance = axios.create({ withCredentials: true });
+const axiosInstance = axios.create();
 
 axiosInstance.interceptors.response.use(
   (response) => response,
