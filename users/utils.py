@@ -14,7 +14,6 @@ User = get_user_model()
 CURRENT_SITE = settings.CURRENT_SITE
 
 
-
 def send_tenant_password_reset_link(tenant_id: int, email: str = None):
     """Send insurance quote details once
     request was signed with BankID (signal)

@@ -1,10 +1,10 @@
 from django_q.tasks import schedule
 from rest_framework import serializers
-from .models import(
-    DeviceScheduleModel, 
+from .models import (
+    DeviceScheduleModel,
     ThermostatSubscriberModel,
     HeatSwitchSubscriberModel,
-    AnalogueThermostatSubscriberModel,
+    AnalogueThermostatSubscriberModel, ZoneSubscriberModel,
 )
 from devices.models import SmartThermostatModel
 
@@ -19,22 +19,21 @@ class ScheduleOptionsModelSerializer(serializers.ModelSerializer):
 #         model = LandlordOffHoursScheduleModel
 #         fields = '__all__'
 
-class ThermostatSubscriberModelSerializer(serializers.ModelSerializer):
 
+class ThermostatSubscriberModelSerializer(serializers.ModelSerializer):
     class Meta:
         model = ThermostatSubscriberModel
         exclude = ['created_at', 'updated_at']
         depth = 1
 
-class ThermostatSubscriberModelCreateSerializer(serializers.ModelSerializer):
 
+class ThermostatSubscriberModelCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = ThermostatSubscriberModel
         exclude = ['created_at', 'updated_at']
 
 
 class SwitchSubscriberModelSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = HeatSwitchSubscriberModel
         exclude = ['created_at', 'updated_at']
@@ -42,13 +41,12 @@ class SwitchSubscriberModelSerializer(serializers.ModelSerializer):
 
 
 class SwitchSubscriberModelCreateSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = HeatSwitchSubscriberModel
         exclude = ['created_at', 'updated_at']
 
-class AnalogueSubscriberModelSerializer(serializers.ModelSerializer):
 
+class AnalogueSubscriberModelSerializer(serializers.ModelSerializer):
     class Meta:
         model = AnalogueThermostatSubscriberModel
         exclude = ['created_at', 'updated_at']
@@ -56,13 +54,16 @@ class AnalogueSubscriberModelSerializer(serializers.ModelSerializer):
 
 
 class AnalogueSubscriberModelCreateSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = AnalogueThermostatSubscriberModel
         exclude = ['created_at', 'updated_at']
 
 
+class ZoneSubscriberModelSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ZoneSubscriberModel
+        exclude = ['created_at', 'updated_at']
 
 
-class ModelPkSerializer(serializers.Serializer):
+class ModelPkSerializer(serializers.Serializer, serializers.ListSerializer):
     pk = serializers.IntegerField()

@@ -10,7 +10,6 @@ from .models import (
 )
 
 
-
 admin.site.register(ZipCodeModel)
 admin.site.register(BuildingModel)
 admin.site.register(ApartmentModel)

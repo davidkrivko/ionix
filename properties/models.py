@@ -1,4 +1,3 @@
-from tabnanny import verbose
 from django.db import models
 from devices.models import (
     AnalogueThermostatModel, 
@@ -7,6 +6,7 @@ from devices.models import (
     SimpleSwitchModel,
 )
 from .choices import ZONE_TYPES, ROOM_TYPES
+
 
 class ZipCodeModel(models.Model):
 
@@ -56,9 +56,9 @@ class ZoneAbstractModel(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
 
-
 class ZoneModel(ZoneAbstractModel):
-    """Zone model describes heating loop only
+    """
+    Zone model describes heating loop only
     """
     class Meta:
         verbose_name = "Heating zone"
@@ -86,7 +86,6 @@ class ZoneModel(ZoneAbstractModel):
 
     def __str__(self) -> str:
         return f"{self.name} {self.controller} "
-
 
 
 class PropertyAbstractModel(models.Model):
