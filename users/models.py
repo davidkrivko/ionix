@@ -23,13 +23,11 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         return f"{self.username}"
 
 
-
 class ProfileAbstractModel(models.Model):
-    
     class Meta:
         abstract = True
 
-    first_name =  models.CharField(max_length=60, default='', blank=True)
+    first_name = models.CharField(max_length=60, default='', blank=True)
     logo = models.ImageField(null=True, blank=True, default='')
 
     created_at = models.DateTimeField(auto_now_add=True)
@@ -93,6 +91,7 @@ class StaffProfileModel(ProfileAbstractModel):
         on_delete=models.CASCADE,
         related_name="staffuser",
     )
+
     def __str__(self) -> str:
         return f"Employee {self.first_name}"
 
@@ -103,7 +102,6 @@ class TenantProfileModel(ProfileAbstractModel):
         verbose_name = "Tenant profile"
         verbose_name_plural = "Tenant profiles"
         ordering = ['-created_at']
-
 
     user = models.OneToOneField(
         CustomUser,

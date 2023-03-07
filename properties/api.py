@@ -12,9 +12,6 @@ from django.utils import timezone
 now = timezone.now
 
 
-
-
-
 class CheckLastTemperatureApiView(APIView):
     """Allow tenants to parse last temperature
     observation from Zip code model field
@@ -29,7 +26,7 @@ class CheckLastTemperatureApiView(APIView):
             },
         }
         zip_code = None
-        #allow parsing by building id for landlords
+        # allow parsing by building id for landlords
         build_id = request.GET.get('build_id')
         try:
             owner = request.user.owner
@@ -45,13 +42,13 @@ class CheckLastTemperatureApiView(APIView):
         if zip_code is not None:
             if zip_code.updated_at.date() == now().date() and zip_code.todays_temp is not None:
                 ctx['data']['temp_f'] = zip_code.todays_temp
-        
+
         return Response(ctx, status=200)
 
 
-
 class ChangeZoneNameApiView(APIView):
-    """Allow owners to change zone names
+    """
+    3Allow owners to change zone names
     """
     def post(self, request):
 
@@ -80,7 +77,8 @@ class ChangeZoneNameApiView(APIView):
             
 
 class ChangeRoomNameApiView(APIView):
-    """Allow Tenants and owners change room names
+    """
+    Allow Tenants and owners change room names
     """
     def post(self, request):
 
@@ -109,9 +107,9 @@ class ChangeRoomNameApiView(APIView):
             return Response(ctx, status=200)
 
 
-
 class FetchUpdateRoomNameApiView(APIView):
-    """Allow Tenants and owners change room names
+    """
+    Allow Tenants and owners change room names
     """
     def get(self, request):
         ctx = {

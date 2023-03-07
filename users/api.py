@@ -159,7 +159,8 @@ class UpdateOwnerProfileApiView(APIView):
 
 
 class UpdateTenantPasswordApiView(APIView):
-    """Allow tenants to update their password
+    """
+    Allow tenants to update their password
     withing profile page (whilte authenticated)
     """
 

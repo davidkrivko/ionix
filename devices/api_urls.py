@@ -24,6 +24,7 @@ from .api import (
     GetThermostatDataFromStream,
     GetControllerDataFromStream,
     ThermostatNameUpdateView,
+    BoilerHealthStatusView,
 )
 
 
@@ -35,6 +36,7 @@ urlpatterns = [
     path("v2/thermostats/", OwnSmartThermostatsList.as_view()),
     path("v2/thermostat/data/<str:serial>/", GetThermostatDataFromStream.as_view()),
     path("v2/controller/data/<str:serial>/", GetControllerDataFromStream.as_view()),
+    path("boiler/health_status/<str:serial_num>", BoilerHealthStatusView.as_view())
     # Legacy from (2021)
     # ioniq controllers
     # path("controller/data/", FetchTroubleShootingDataApiView.as_view()),

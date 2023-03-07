@@ -1,5 +1,6 @@
 from datetime import timezone
 from django_q.tasks import async_task
+from rest_framework import generics, mixins, viewsets
 from rest_framework.views import APIView
 from rest_framework.generics import ListAPIView, RetrieveAPIView, RetrieveUpdateAPIView
 from rest_framework.response import Response
@@ -18,6 +19,7 @@ from .serializers import (
     DeviceIdSerializer,
     SmartThermostatModelSerializer,
     NameFieldSerializer,
+    BoilerHealthStatusSerializer,
 )
 from .models import (
     AnalogueThermostatModel,
@@ -51,7 +53,7 @@ class OwnSmartThermostatsList(ListAPIView):
 
 class GetThermostatDataFromStream(APIView):
 
-    permission_classses = [IsAuthenticated]
+    permission_classes = [IsAuthenticated]
 
     def get(self, request, *args, **kwargs):
         thermostat_serial = self.kwargs.get("serial")
@@ -531,6 +533,16 @@ class RetrieveDeviceZoneStatusApiView(APIView):
         else:
             ctx["detail"] = serializer.error_messages
             return Response(ctx, status=500)
+
+
+class BoilerHealthStatusView(generics.RetrieveAPIView):
+    serializer_class = BoilerHealthStatusSerializer
+    lookup_field = "serial_num"
+
+    def get_object(self):
+        obj = BoilerModel.objects.get(serial_num=self.kwargs["serial_num"])
+
+        return obj
 
 
 class BoilerListApiView(ListAPIView):

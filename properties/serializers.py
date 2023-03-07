@@ -6,7 +6,6 @@ from .models import (
 )
 
 
-
 class BuildingModelSerializer(serializers.ModelSerializer):
 
     class Meta:
@@ -41,7 +40,6 @@ class RoomModelSerializer(serializers.ModelSerializer):
 class ChangePropertyNameSerializer(serializers.Serializer):
     id = serializers.IntegerField()
     name = serializers.CharField(required=False)
-
 
 
 class ApartmentThermostatLimitsSerializer(serializers.Serializer):

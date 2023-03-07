@@ -30,7 +30,7 @@ urlpatterns = [
     
     path('token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
-    
+
     path('devices/', include('devices.api_urls')),
     path('users/', include('users.api_urls')),
     path('properties/', include('properties.api_urls')),
