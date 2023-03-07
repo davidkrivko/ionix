@@ -23,7 +23,7 @@ Activate environment:
 
 Use should connect env file to your interpreter and run it with it.
 
-Of course, you need to create a postgresql and redis database
+Of course, you need to create a postgresql and redis databases
 
 ````shell
 DJANGO_ADMIN_PASS=Gbk6ciPUDI
