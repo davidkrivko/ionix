@@ -21,7 +21,9 @@ Activate environment:
 
 ## .env file
 
-Use should connect env file to your interpreter and run it with it
+Use should connect env file to your interpreter and run it with it.
+
+Of course, you need to create a postgresql and redis database
 
 ````shell
 DJANGO_ADMIN_PASS=Gbk6ciPUDI
@@ -43,9 +45,17 @@ REDIS_NAME=NAME
 ````
 
 
+To fill database you must use mydb.dump file, and use admin user
+
+    username: admin@admin.com
+    password: 12345678
+
+`
+pg_restore -h <host> -p <port> -U <username> -d <database_name> <path to mydb.dump>
+`
+
 Run Django
 
-`./manage.py runserver`
-
-Staging env: panels-staging.turnonheat.com
-             ioadmin-staging.turnonheat.com
+```shell
+python manage.py runserver
+```
