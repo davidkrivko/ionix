@@ -92,7 +92,7 @@ def migrate_temp_record(record_pk: int):
     Custom function to export record to remote postgres
     """
 
-    record = WeatherRecordModel.objects.get(pk = record_pk)
+    record = WeatherRecordModel.objects.get(pk=record_pk)
     # print("record", record)
     zip_code = record.zip_code.zip_code
     # print("zip_code", zip_code)
