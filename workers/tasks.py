@@ -13,7 +13,8 @@ now = timezone.now
 ### WWSD LOGIC
 
 def trigger_warm_weather_shutdown_check():
-    """Scheduled taks after weather API update
+    """
+    Scheduled taks after weather API update
     """
     # So the outdoor temp update arrived, let's check all the buidlings withing each zip
 
