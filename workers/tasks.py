@@ -8,9 +8,11 @@ import logging
 from users.models import TenantProfileModel
 
 now = timezone.now
+logger = logging.getLogger('django')
 
 
-### WWSD LOGIC
+# WWSD LOGIC
+
 
 def trigger_warm_weather_shutdown_check():
     """
@@ -19,6 +21,7 @@ def trigger_warm_weather_shutdown_check():
     # So the outdoor temp update arrived, let's check all the buidlings withing each zip
 
     iter = [obj.pk for obj in ZipCodeModel.objects.all()]
+    logger.info(f"First function {iter}")
     async_iter('workers.tasks.check_boiler_settings', iter)
 
 
@@ -28,6 +31,7 @@ def check_boiler_settings(zip_pk: int):
     and checks their wwsd settings
     """
     print("Running boiler settings check")
+    logger.info("Second function")
     try:
         zip = ZipCodeModel.objects.get(pk=zip_pk)
     except:
@@ -42,6 +46,7 @@ def check_boiler_settings(zip_pk: int):
         #     boiler = boiler_room.boiler
         if building.boiler.shutdown_enabled is True:
             # trigger actual comparator function and endswitch tooggler
+            logger.info("Condition is active")
             async_task('workers.tasks.check_actuality_data', building.boiler.pk, zip_pk)
     return "OK"
 
@@ -82,6 +87,7 @@ def check_boiler_settings(zip_pk: int):
 
 
 def check_actuality_data(boiler_pk: int, zip_pk: int):
+    logger.info("Third function")
     zip_model = ZipCodeModel.objects.get(pk=zip_pk)
     boiler = BoilerModel.objects.get(pk=boiler_pk)
     shutdown_temp = boiler.shutdown_temp  # Current settings for the shutdown temp
@@ -92,21 +98,28 @@ def check_actuality_data(boiler_pk: int, zip_pk: int):
     is_actual = update_date == now().date()
     if not is_actual:
         try:
+            logger.info("Temperature is not actual")
             async_task("api.utils.parse_temp_from_weathergov", zip_pk)
         except:
+            logger.info("ZIP code is invalid")
             logging.warning("ZIP code is invalid")
     if zip_model.todays_temp >= shutdown_temp:
         boiler.shutdown_active = True
         value = 0
+        logger.info("zip_model.todays_temp >= shutdown_temp")
     if zip_model.todays_temp < shutdown_temp:
         boiler.shutdown_active = False
-        value = 2
+        value = 1
+        logger.info("zip_model.todays_temp >= shutdown_temp")
 
+    logger.info(f"wwsd = {value}")
     payload = {
         "wwsd": value
     }
     async_task("streams.daos.set_boiler_data", controller, payload)
     boiler.save()
+
+    logger.info("Done!")
 
     return ("Boiler WWSD status:", value)
 
