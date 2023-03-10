@@ -18,6 +18,7 @@ streams_key_schema = StreamsKeySchema()
 REDIS_STREAM_MAX_LEN = settings.REDIS_STREAM_MAX_LEN
 
 logger = logging.getLogger('django')
+logger.setLevel(logging.INFO)
 
 
 class AbstractDaoClass(ABC):

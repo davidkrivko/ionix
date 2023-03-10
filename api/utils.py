@@ -14,6 +14,7 @@ from dateutil.relativedelta import relativedelta
 
 
 logger = logging.getLogger('django')
+logger.setLevel(logging.INFO)
 
 
 
