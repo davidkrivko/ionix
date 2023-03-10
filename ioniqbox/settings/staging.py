@@ -10,11 +10,8 @@ SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY')
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    'api-staging.turnonheat.com',
-    'ioadmin-staging.turnonheat.com',
-    'panel-staging.turnonheat.com',
-    'admin.ionix-staging.com',
     'do.ionix-staging.com',
+    'admin.ionix-staging.com',
     'do-api.ionix-staging.com',
 ]
 

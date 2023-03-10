@@ -102,10 +102,9 @@ def check_actuality_data(boiler_pk: int, zip_pk: int):
         value = 2
 
     payload = {
-        "sn": controller.serial_num,
-        "relay": value,
+        "wwsd": value
     }
-    async_task("streams.daos.add_ioniq_to_data_stream", payload)
+    async_task("streams.daos.set_boiler_data", controller, payload)
     boiler.save()
 
     return ("Boiler WWSD status:", value)

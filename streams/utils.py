@@ -49,7 +49,8 @@ def fetch_online_status_from_online_stream(sn: str, device: str) -> object:
         ctx['detail'] = f"Timedelta (last seen online) [{delta.seconds} s]"
     else:
         ctx['data'] = False
-        ctx['detail'] = f"Timedelta (last seen online) [{delta.seconds} s] status exceeds limit [{DEVICE_ONLINE_STATUS_DELTA_SEC} s]"
+        ctx['detail'] = f"Timedelta (last seen online) [{delta.seconds} s] " \
+                        f"status exceeds limit [{DEVICE_ONLINE_STATUS_DELTA_SEC} s]"
 
     return ctx
 

@@ -1,5 +1,5 @@
 from django_q.tasks import async_task
-from rest_framework import viewsets, status
+from rest_framework import viewsets, status, mixins
 from rest_framework.views import APIView
 from rest_framework.generics import ListAPIView, CreateAPIView
 from rest_framework.response import Response
@@ -329,11 +329,17 @@ class TenantScheduleSubscriberDeleteApiView(APIView):
 # HEATING ZONE BLOCK
 
 
-class ZoneSubscriberViewSet(viewsets.ModelViewSet):
+class ZoneSubscriberViewSet(
+    viewsets.GenericViewSet,
+    mixins.CreateModelMixin,
+    mixins.DestroyModelMixin,
+    mixins.ListModelMixin,
+):
     serializer_class = ZoneSubscriberModelSerializer
 
     def get_queryset(self):
         queryset = ZoneSubscriberModel.objects.filter(owner=self.request.user.owner)
+        return queryset
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
