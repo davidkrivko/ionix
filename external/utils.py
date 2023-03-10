@@ -13,7 +13,7 @@ from streams.utils import fetch_online_status_from_online_stream
 from django.utils.timezone import now
 from django.utils import dateparse
 
-# from streams.daos import RedisDao
+from streams.daos import RedisDao
 from devices.utils import dao
 
 

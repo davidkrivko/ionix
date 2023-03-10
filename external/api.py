@@ -36,7 +36,9 @@ THERMOSTAT_TOKEN = settings.THERMOSTAT_TOKEN
 
 # MOCKUP APIs #noqa
 class IoniqMaxDataApiView(APIView):
-    """Ioniq Max mockup API"""
+    """
+    Ioniq Max mockup API
+    """
 
     permission_classes = [AllowAny]
 
