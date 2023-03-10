@@ -1,6 +1,9 @@
 import re
 import requests
 import logging
+
+from django.utils import timezone
+
 from properties.models import (
     ZipCodeModel,
     WeatherRecordModel,
@@ -63,6 +66,7 @@ def parse_temp_from_weathergov(zip_pk: int):
                 temperature_f = (temperature_c * 9/5) + 32
             
                 zip_obj.todays_temp = temperature_f
+                zip_obj.updated_at = timezone.now()
                 zip_obj.save()
 
                 # async_task('devices.utils.insert_weather_data', zip_obj.zip_code, temperature_f, temperature_c)
