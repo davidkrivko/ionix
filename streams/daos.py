@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+import logging
 from .schemas import StreamsKeySchema
 from django_redis import get_redis_connection
 from django.utils import timezone
@@ -15,6 +16,8 @@ now = timezone.now
 streams_key_schema = StreamsKeySchema()
 
 REDIS_STREAM_MAX_LEN = settings.REDIS_STREAM_MAX_LEN
+
+logger = logging.getLogger('django')
 
 
 class AbstractDaoClass(ABC):
@@ -241,6 +244,7 @@ class RedisDao(AbstractDaoClass):
         return connect.get(key)
 
     def set_boiler_data(self, sn: str, payload: dict):
+        logger.info("Changing boiler data")
         key = streams_key_schema.boiler_data_key(sn)
         connect = get_redis_connection("streams")
         return connect.hmset(key, payload)

@@ -13,6 +13,10 @@ from devices.utils import insert_weather_data
 from dateutil.relativedelta import relativedelta
 
 
+logger = logging.getLogger('django')
+
+
+
 def parse_temp_from_weathergov(zip_pk: int):
     """
     Extracts lat and lon records from the
@@ -21,7 +25,7 @@ def parse_temp_from_weathergov(zip_pk: int):
     Args:
         zip_pk (int): ZipCode model pk
     """
-
+    logger.info("We are parce weather")
     zip_obj = ZipCodeModel.objects.get(pk=zip_pk)
 
     lat = zip_obj.lat_coord
@@ -30,7 +34,7 @@ def parse_temp_from_weathergov(zip_pk: int):
     if lat is None and lon is None:
         logging.warning("Lat and Lon coord-s are not set")
         return
-
+    logger.info(f"Zip code id {zip_obj.zip_code}")
     headers = {
             f"User-Agent": "Ioniqbox <alert@ioniqbox.com>"
         }
@@ -76,6 +80,7 @@ def parse_temp_from_weathergov(zip_pk: int):
                     temp_f=temperature_f,
                     temp_c=temperature_c,
                 )
+            logger.info(f"{temperature_c}C, {temperature_f}F")
 
     return f"Temp F {temperature_f}"
 

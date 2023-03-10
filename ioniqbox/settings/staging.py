@@ -71,3 +71,23 @@ DEFAULT_ADMIN_EMAIL = "admin@twinkle.nyc"
 AUTH_PASSWORD_VALIDATORS = []
 
 CORS_ORIGIN_ALLOW_ALL = True
+
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'file': {
+            'level': 'INFO',
+            'class': 'logging.FileHandler',
+            'filename': '/home/david/logging/file.log',
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['file'],
+            'level': 'INFO',
+            'propagate': True,
+        },
+    },
+}
