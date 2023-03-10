@@ -9,6 +9,7 @@ from users.models import TenantProfileModel
 
 now = timezone.now
 logger = logging.getLogger('django')
+logger.setLevel(logging.INFO)
 
 
 # WWSD LOGIC
