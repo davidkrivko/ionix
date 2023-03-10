@@ -6,8 +6,8 @@ User = get_user_model()
 
 DJANGO_ADMIN_PASS = os.environ.get('DJANGO_ADMIN_PASS')
 
-class Command(BaseCommand):
 
+class Command(BaseCommand):
     def handle(self, *args, **options):
         if not User.objects.filter(username="ioniqadmin@turnonheat.com").exists():
             User.objects.create_superuser("ioniqadmin@turnonheat.com", DJANGO_ADMIN_PASS)

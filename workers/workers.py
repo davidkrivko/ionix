@@ -14,7 +14,7 @@ def update_weather_on_zips():
     iter = [obj.pk for obj in ZipCodeModel.objects.all()]
 
     async_iter("api.utils.parse_temp_from_weathergov", iter)
-    wwsd_next_check_in = now + timedelta(minutes=5)
+    wwsd_next_check_in = now + timedelta(minutes=30)
     schedule(
         "workers.tasks.trigger_warm_weather_shutdown_check",
         schedule_type="O",
@@ -24,7 +24,8 @@ def update_weather_on_zips():
 
 
 def check_scheduled_objects():
-    """Looks through DeviceScheduleModel for
+    """
+    Looks through DeviceScheduleModel for
     objects with current %H:%M timestamp and weekday part
     and passes it to task for futher proceeding
     """

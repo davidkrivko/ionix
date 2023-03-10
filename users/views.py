@@ -47,7 +47,8 @@ def login_view(request):
 
 
 def thermostat_login_view(request):
-    """Primary entrypoint login view
+    """
+    Primary entrypoint login view
 
     Args:
         request ([type]): [description]
@@ -132,7 +133,8 @@ def restricted_area_view(request):
 
 
 def request_password_reset(request):
-    """Simple view that Allows user
+    """
+    Simple view that Allows user
     to request password reset link
     """
 

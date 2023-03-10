@@ -43,7 +43,7 @@ DEVICE_ONLINE_STATUS_DELTA_SEC = settings.DEVICE_ONLINE_STATUS_DELTA_SEC
 class OwnSmartThermostatsList(ListAPIView):
 
     serializer_class = SmartThermostatModelSerializer
-    permission_classses = [IsAuthenticated]
+    permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
         owner = self.request.user.owner
@@ -176,7 +176,8 @@ class ThermostatDataBySerialNumber(APIView):
 
 
 class ThermostatSetTemperatureApiView(APIView):
-    """Allow thermostat owner to write set temperature
+    """
+    Allow thermostat owner to write set temperature
     value/command
     """
 
@@ -462,7 +463,8 @@ class HeatSwitchStatusUpdateApiView(APIView):
 
 # NB and permissions check
 class AnalogueThermostatStatusUpdateApiView(APIView):
-    """Allow heat switcher status update
+    """
+    Allow heat switcher status update
     for tenants and owners
     """
 

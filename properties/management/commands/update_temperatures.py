@@ -8,14 +8,17 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         for zip_code in ZipCodeModel.objects.all():
-            url = f'https://api.openweathermap.org/data/2.5/weather?zip=' \
-                  f'{zip_code.zip_code}&appid=6bbeb61dded83964d1903f45590a4335&units=metric'
+            url = f'https://api.openweathermap.org/data/2.5/' \
+                  f'weather?zip={zip_code.zip_code}&appid=4c1' \
+                  f'782a65f1e266cace6cd370f9da9bb&units=imperial'
             response = requests.get(url)
-            if response.status_code == 200:
+            try:
                 data = response.json()
-                temperature = data['main']['temp']
+                temperature = int(data['main']['temp'])
                 zip_code.todays_temp = temperature
                 zip_code.save()
+            except:
+                continue
 
 
 comm = Command()

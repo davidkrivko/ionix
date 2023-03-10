@@ -12,6 +12,7 @@ from django.dispatch import receiver
 from streams.daos import redis_dao
 from loguru import logger
 
+
 @receiver(post_save, sender=SmartThermostatModel)
 def trigger_on_application_update(sender, instance, created, **kwargs):
     redis_dao.set_thermostat_setpoint(sn=instance.serial_num, setpoint=instance.set_temperature)

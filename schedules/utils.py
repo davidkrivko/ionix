@@ -3,10 +3,11 @@ from .models import DeviceScheduleModel
 
 
 def populate_schedule_options():
-    """Check if schedule table is blank
+    """
+    Check if schedule table is blank
     and populate it with objects (options)
     """
-    
+
     queryset = DeviceScheduleModel.objects.all()
 
     if not queryset.exists():
@@ -21,9 +22,8 @@ def populate_schedule_options():
 
             for i in range(0, 96):
                 obj = DeviceScheduleModel(
-                    week_day = weekday,
-                    checkpoint = timestamp
+                    week_day=weekday,
+                    checkpoint=timestamp
                 )
                 obj.save()
                 timestamp = timestamp + delta
-            

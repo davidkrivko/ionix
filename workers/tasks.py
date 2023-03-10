@@ -6,6 +6,7 @@ from django.utils import timezone
 import logging
 
 from users.models import TenantProfileModel
+
 now = timezone.now
 
 
@@ -15,13 +16,14 @@ def trigger_warm_weather_shutdown_check():
     """Scheduled taks after weather API update
     """
     # So the outdoor temp update arrived, let's check all the buidlings withing each zip
-    iter = [ obj.pk for obj in ZipCodeModel.objects.all()]
+
+    iter = [obj.pk for obj in ZipCodeModel.objects.all()]
     async_iter('workers.tasks.check_boiler_settings', iter)
 
 
-
 def check_boiler_settings(zip_pk: int):
-    """Fetches all buildings/boilers
+    """
+    Fetches all buildings/boilers
     and checks their wwsd settings
     """
     print("Running boiler settings check")
@@ -34,51 +36,81 @@ def check_boiler_settings(zip_pk: int):
     buildings = zip.buildings.all()
     for building in buildings:
 
-        boiler_rooms = building.boiler_rooms.all()
-        for boiler_room in boiler_rooms:
-            boiler = boiler_room.boiler
-            if boiler.shutdown_enabled == True:
-                # trigger actual comparator function and endswitch tooggler
-                async_task('workers.tasks.toggle_warm_weather_shutdown', boiler.pk, zip_pk)
-    return ("OK")
-    
+        # boiler_rooms = building.boiler_rooms.all()
+        # for boiler_room in boiler_rooms:
+        #     boiler = boiler_room.boiler
+        if building.boiler.shutdown_enabled is True:
+            # trigger actual comparator function and endswitch tooggler
+            async_task('workers.tasks.check_actuality_data', building.boiler.pk, zip_pk)
+    return "OK"
 
 
-def toggle_warm_weather_shutdown(boiler_pk: int, zip_pk: int):
-    """
-    Disable or enable endswitch if owner have enabled
-    automatic warm weather shutdown mode and current 
-    outdoor temperature has changed.
-    """
+# def toggle_warm_weather_shutdown(boiler_pk: int, zip_pk: int):
+#     """
+#     Disable or enable endswitch if owner have enabled
+#     automatic warm weather shutdown mode and current
+#     outdoor temperature has changed.
+#     """
+#     zip_model = ZipCodeModel.objects.get(pk=zip_pk)
+#     boiler = BoilerModel.objects.get(pk=boiler_pk)
+#     shutdown_temp = boiler.shutdown_temp  # Current settings for the shutdown temp
+#     outdoor_temp = zip_model.todays_temp  # Last update from the weather API
+#     update_date = zip_model.updated_at.date()
+#     controller = boiler.ioniq_controllers.first()
+#     value = 2  # set to autonomous work by default
+#
+#     # bool
+#     is_freshy = update_date == now().date()  # NB change this to timedelta
+#     if not is_freshy:
+#         logging.warning("Weather API update is not fresh, please troubleshoot the api")
+#         async_task('devices.utils.switch_boiler_supply', controller.serial_num, value)
+#         return "Did nothing, weather api is dead"
+#
+#     if outdoor_temp >= shutdown_temp:
+#         # set endswitch to offline
+#         boiler.shutdown_active = True
+#         value = 0
+#     if outdoor_temp < shutdown_temp:
+#         boiler.shutdown_active = False
+#         value = 2
+#     # update device variables [blr] for IoniqMax
+#     async_task('devices.utils.switch_boiler_supply', controller.serial_num, value)
+#     boiler.save()
+#
+#     return ("Boiler WWSD status:", value)
+
+
+def check_actuality_data(boiler_pk: int, zip_pk: int):
     zip_model = ZipCodeModel.objects.get(pk=zip_pk)
     boiler = BoilerModel.objects.get(pk=boiler_pk)
-    shutdown_temp = boiler.shutdown_temp #Current settings for the shutdown temp
-    outdoor_temp = zip_model.todays_temp #Last update from the weather API
+    shutdown_temp = boiler.shutdown_temp  # Current settings for the shutdown temp
     update_date = zip_model.updated_at.date()
     controller = boiler.ioniq_controllers.first()
-    value = 2 # set to autonomous work by default
+    value = 2
 
-    # bool
-    is_freshy = update_date == now().date() #NB change this to timedelta
-    if not is_freshy:
-        logging.warning("Weather API update is not fresh, please troubleshoot the api")
-        async_task('devices.utils.switch_boiler_supply', controller.serial_num, value)
-        return ("Did nothing, weather api is dead")
-
-    if outdoor_temp >= shutdown_temp:
-        #set endswitch to offline
+    is_actual = update_date == now().date()
+    if not is_actual:
+        try:
+            async_task("workers.workers.update_weather_on_zips")
+        except:
+            logging.warning("ZIP code is invalid")
+    if zip_model.todays_temp >= shutdown_temp:
         boiler.shutdown_active = True
         value = 0
-    if outdoor_temp < shutdown_temp:
+    if zip_model.todays_temp < shutdown_temp:
         boiler.shutdown_active = False
         value = 2
-    # update device variables [blr] for IoniqMax
-    async_task('devices.utils.switch_boiler_supply', controller.serial_num, value)
+
+    payload = {
+        "sn": controller.serial_num,
+        "relay": value,
+    }
+    async_task("streams.daos.add_ioniq_to_data_stream", payload)
     boiler.save()
 
     return ("Boiler WWSD status:", value)
 
-    
+
 # SCHEDULE TASK WORKERS
 def reset_thermostat_with_schedule(schedule_pk: int):
     """
@@ -118,7 +150,6 @@ def reset_switches_with_schedule(schedule_pk: int):
         switch.save()
 
 
-    
 def reset_analogue_thermostats_with_schedule(schedule_pk: int):
     """
     Background task run by the scheduled worker.
@@ -153,8 +184,7 @@ def process_vacant_apartment(apartment_id: int):
         vacant_apartment_setpoint = None
     # print("vacant_apartment_setpoint", vacant_apartment_setpoint)
 
-
-    #Shared access clean up
+    # Shared access clean up
     if rooms_queryset.exists():
         # print("rooms_queryset.exists():", rooms_queryset.exists())
         for room in rooms_queryset:
@@ -165,16 +195,16 @@ def process_vacant_apartment(apartment_id: int):
                     # print("tenant", tenant)
                     user = tenant.user
                     user.delete()
-                    #remove tenant profile by cascade
-    
-            #Thermostats processing
+                    # remove tenant profile by cascade
+
+            # Thermostats processing
             smart_thermostat = room.thermostat
             if room.thermostat is not None and vacant_apartment_setpoint is not None:
                 smart_thermostat.set_temperature = vacant_apartment_setpoint
                 smart_thermostat.save()
 
     return "OK"
-                
+
 
 def apartment_occupied_now(tenant_id: int):
     """
@@ -189,6 +219,3 @@ def apartment_occupied_now(tenant_id: int):
     apartment = room.apartment
     apartment.is_vacant = False
     apartment.save()
-
-    
-

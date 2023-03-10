@@ -1,4 +1,5 @@
 import logging
+import os
 from datetime import datetime
 import numpy as np
 
@@ -40,6 +41,17 @@ THERMOSTAT_QUERY_LIMIT = 1
 DB_STRING = f"postgresql://{IOT_DB_USER}:{IOT_DB_PASSWORD}@{IOT_DB_HOST}/{IOT_DB_NAME}"
 db = create_engine(DB_STRING)
 meta = MetaData(db)
+
+# USER = os.environ.get("RDS_USERNAME")
+# HOST = os.environ.get("RDS_HOSTNAME")
+# DB_NAME = os.environ.get("RDS_DB_NAME")
+# PORT = os.environ.get("25060")
+# PASSWORD = os.environ.get("RDS_PASSWORD")
+#
+# DB = f"postgresql://{USER}:{PASSWORD}@{HOST}:{PORT}/{DB_NAME}?sslmode=require"
+# db = create_engine(DB)
+# meta = MetaData(db)
+
 
 thermostatdata = Table(
     "thermostatdata",
@@ -551,11 +563,11 @@ def switch_boiler_supply(serial_num: str, value: int):
     # except Exception as e:
     #     logging.error("Unable to set ioniqmax vars to Redis hash")
     #     return str(e)
-
+    #
     # # legacy: update remote postgres devicevariables table
     # last_record = fetch_device_variables(serial_num)
     # # print(f"Update device variables {serial_num}, value {value}")
-
+    #
     # if last_record is not None:
     #     last_record["blr"] = value
     #     update_device_variables_last_record(last_record)
@@ -608,7 +620,8 @@ def insert_ioniqmax_system_data(data):
 
 
 def insert_weather_data(zip_code: str, temp_f: int, temp_c: int, real_time=None):
-    """Insert outdoor temperature records fetched for specific zip-code
+    """
+    Insert outdoor temperature records fetched for specific zip-code
     from weather.gov
     """
     # if real_time is None:

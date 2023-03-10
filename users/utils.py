@@ -30,7 +30,9 @@ def send_tenant_password_reset_link(tenant_id: int, email: str = None):
         
     url = tenant.access_link
     subject = "Boiler management panel"
-    content = f"Hello {tenant.first_name}, You've been invited to boiler management control panel. Please, follow the link to access your new account and set your first password: {url}"
+    content = f"Hello {tenant.first_name}, You've been invited to boiler" \
+              f" management control panel. Please, follow the link to access" \
+              f" your new account and set your first password: {url}"
 
     send_mail(
         subject,
@@ -58,17 +60,19 @@ def update_tenant_password_reset_success(tenant_id: int):
     return "OK"
 
 
-
 def send_password_reset_link(user_pk: int):
 
     user = User.objects.get(pk = user_pk)
 
     token = password_reset_tokenizer.make_token(user)
     user_id = urlsafe_base64_encode(force_bytes(user_pk))
-    url = CURRENT_SITE + reverse('reset-validate', kwargs={'user_id': user_id, 'token': token})
+    url = CURRENT_SITE + reverse('reset-validate',
+                                 kwargs={'user_id': user_id, 'token': token})
     email = user.username
     subject = "Boiler management panel"
-    content = f"Hello, we've just received a password reset request for your account at turnonheat.com. Please follow the link to set your new password : {url} "
+    content = f"Hello, we've just received a password reset request for " \
+              f"your account at turnonheat.com. Please follow the link to " \
+              f"set your new password : {url} "
 
     send_mail(
         subject,

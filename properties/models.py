@@ -204,7 +204,6 @@ class RoomModel(PropertyAbstractModel):
         verbose_name = "Rooom"
         verbose_name_plural = "Rooms"
         ordering = ['-created_at']
-    
 
     size = models.SmallIntegerField(
         null=True,
@@ -277,7 +276,6 @@ class ApartmentAlertDetailsModel(models.Model):
     details = models.TextField(default='')    
 
     created_at = models.DateTimeField(auto_now_add=True)
-
 
     def __str__(self) -> str:
         return f"{self.created_at.date()} {self.apartment}"
