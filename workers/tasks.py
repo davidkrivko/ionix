@@ -91,7 +91,7 @@ def check_actuality_data(boiler_pk: int, zip_pk: int):
     is_actual = update_date == now().date()
     if not is_actual:
         try:
-            async_task("workers.workers.update_weather_on_zips")
+            async_task("api.utils.parse_temp_from_weathergov", zip_pk)
         except:
             logging.warning("ZIP code is invalid")
     if zip_model.todays_temp >= shutdown_temp:
