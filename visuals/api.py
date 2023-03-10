@@ -41,7 +41,6 @@ class FetchHeatingCyclesAndWeatherDataApiView(APIView):
             #     ctx['detail'] = "Unable to locate specified controller"
             #     return Response(ctx, status = 404)
 
-            
             delta = end_date - start_date
             date_cycles_count = []
             date_labels = []

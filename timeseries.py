@@ -11,11 +11,13 @@ redis = RedisTimeSeries(host='redis-10587.c233.eu-west-1-1.ec2.cloud.redislabs.c
 # redis.flushdb()
 key = 'temperature'
 
+
 def create(key):
     print('\n Create new time series: %s' % str(key))
-    #redis.create(key,retentionSecs=30,labels={'sensor_id' : 2,'area_id' : 32})
-    redis.create(key, retention_msecs=30000, labels={'sensor_id' : 2,'area_id' : 32})
+    # redis.create(key,retentionSecs=30,labels={'sensor_id' : 2,'area_id' : 32})
+    redis.create(key, retention_msecs=30000, labels={'sensor_id': 2, 'area_id': 32})
     print('')
+
 
 def store(key, interval):
     print("\n Append new value to time series:\n")
@@ -23,12 +25,12 @@ def store(key, interval):
     
     for i in range(interval):
             timestamp = int(time.time())
-            value = round(random.uniform(0.0,100.0),2)
+            value = round(random.uniform(0.0, 100.0), 2)
             timestamp_strftime = datetime.datetime.fromtimestamp(timestamp).strftime('%Y-%m-%d %H:%M:%S')
             sys.stdout.write(' %s : %.2f \n' % (timestamp_strftime, value))
             sys.stdout.flush()
-            #redis.add(key,timestamp,value,retentionSecs=30, labels={'sensor_id' : 2,'area_id' : 32})
-            redis.add(key,timestamp, value, retention_msecs=30000, labels={'sensor_id' : 2,'area_id' : 32})
+            # redis.add(key,timestamp,value,retentionSecs=30, labels={'sensor_id' : 2,'area_id' : 32})
+            redis.add(key, timestamp, value, retention_msecs=30000, labels={'sensor_id': 2,'area_id': 32})
             time.sleep(1)
 
     end_time = int(time.time()-1)
@@ -43,8 +45,8 @@ def query(key, begin_time, end_time):
     print("\n Query time series in range:\n\n %s to %s \n" % (begin_time_datetime, end_time_datetime))
 
     try:
-            #for record in redis.range(key,begin_time, end_time,bucketSizeSeconds=1):
-            for record in redis.range(key,begin_time, end_time,bucket_size_msec=1000):
+            # for record in redis.range(key,begin_time, end_time,bucketSizeSeconds=1):
+            for record in redis.range(key, begin_time, end_time, bucket_size_msec=1000):
                     timestamp = datetime.datetime.fromtimestamp(record[0]).strftime('%Y-%m-%d %H:%M:%S')
                     value = round(float(record[1]),2)
                     print(' %s : %.2f ' % (timestamp,value))
@@ -81,15 +83,14 @@ def print_loop(loops):
     print('')
 
 
-
 create(key)
 
 interval = 10
-begin_time, end_time = store(key,interval)
+begin_time, end_time = store(key, interval)
 time.sleep(1)
 
-query(key,begin_time,end_time)
-query(key,begin_time+4,end_time-5)
+query(key, begin_time, end_time)
+query(key, begin_time+4, end_time-5)
 
 print_info()
 print('\n Set expire key: %s' % str(key))
@@ -98,16 +99,16 @@ redis.expire(key, (30))
 loops = 30
 
 print_loop(loops)
-query(key,begin_time,end_time)
+query(key, begin_time, end_time)
 
 time.sleep(1)
 interval = 1
 
 create(key)
-begin_time, end_time = store(key,interval)
+begin_time, end_time = store(key, interval)
 
 time.sleep(1)
-query(key,begin_time,end_time)
+query(key, begin_time, end_time)
 
 time.sleep(1)
 print('\n Delete key: %s' % str(key))
@@ -115,6 +116,6 @@ print('\n Delete key: %s' % str(key))
 redis.delete(key)
 time.sleep(1)
 
-query(key,begin_time,end_time)
+query(key, begin_time, end_time)
 
 print('')
