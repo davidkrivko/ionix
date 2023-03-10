@@ -10,9 +10,6 @@ SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY')
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    'api-staging.turnonheat.com',
-    'ioadmin-staging.turnonheat.com',
-    'panel-staging.turnonheat.com',
     'do.ionix-staging.com',
     'admin.ionix-staging.com',
     'do-api.ionix-staging.com',
@@ -73,4 +70,4 @@ DEFAULT_ADMIN_EMAIL = "admin@twinkle.nyc"
 
 AUTH_PASSWORD_VALIDATORS = []
 
-CORS_ALLOW_ALL_ORIGINS = True
+CORS_ORIGIN_ALLOW_ALL = True

@@ -1,5 +1,6 @@
 from decimal import Decimal
 
+
 def convert_payload_datatypes(payload: dict):
     """
     Converts payload dict value to compatible
@@ -13,7 +14,6 @@ def convert_payload_datatypes(payload: dict):
         new_dict[key] = value
 
     return new_dict
-
 
 
 def decode_redis_hash(raw_hash: dict):

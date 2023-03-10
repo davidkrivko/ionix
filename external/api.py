@@ -31,8 +31,8 @@ from loguru import logger
 now = timezone.now
 dao = RedisDao()
 
-
 THERMOSTAT_TOKEN = settings.THERMOSTAT_TOKEN
+
 
 # MOCKUP APIs #noqa
 class IoniqMaxDataApiView(APIView):
@@ -97,7 +97,6 @@ class IoniqMaxSystemStatusApiView(APIView):
     permission_classes = [AllowAny]
 
     def post(self, request):
-
         return Response(status=200)
 
         # serializer = IoniqMaxSystemStateSerializer(data=request.data)
@@ -148,7 +147,8 @@ class IoniqMaxForceUpgradeApiView(APIView):
 
 
 class IoniqMiniStatusUpdateApiView(APIView):
-    """Receives ioniq's s/n and returns "on" if related
+    """
+    Receives ioniq's s/n and returns "on" if related
     zone thermostats statuses includes at least one
     call for heat status.
     """
@@ -196,6 +196,8 @@ class IoniqMinitStatusChangeApiView(APIView):
 
     Returns:
         [type]: [description]
+
+    systmp - temperature of controller
     """
 
     permission_classes = [AllowAny]
@@ -221,11 +223,12 @@ class IoniqMinitStatusChangeApiView(APIView):
             return Response(serializer.error_messages, status=500)
 
 
-### LEGACY ENDPOINTS
+# LEGACY ENDPOINTS
 
 
 class SetRoomTempOnChange(APIView):
-    """Allow smart thermostats to post data
+    """
+    Allow smart thermostats to post data
     whenever setpoint value changes
     """
 
@@ -279,7 +282,6 @@ class SetRoomTempOnChange(APIView):
 
 
 class SetDeviceOnlineStatus(APIView):
-
     permission_classes = [AllowAny]
 
     def post(self, request):
@@ -317,8 +319,9 @@ class SetDeviceOnlineStatus(APIView):
 
 
 class ProcessRelayThermostatDataApiView(APIView):
-    """Supports custom device communication flow
-    in which pair of ioniq minis should recieved
+    """
+    Supports custom pair of devices communication flow
+    in which ioniq mini and thermostat should receive
     each others state trough redis stream
     """
 
@@ -366,7 +369,7 @@ class ProcessRelayThermostatDataApiView(APIView):
 
                 setpoint = dao.get_thermostat_setpoint(sn=sn1)
                 controller_data = dao.get_paired_relay_controller_data(sn=sn2)
-                
+
                 if setpoint is None:
                     setpoint = 0
 
@@ -394,7 +397,8 @@ class ProcessRelayThermostatDataApiView(APIView):
 
 
 class ProcessPairedMiniDataApiView(APIView):
-    """Supports custom device communication flow
+    """
+    Supports custom device communication flow
     in which pair of ioniq minis should recieved
     each others state trough redis stream
     """
@@ -439,7 +443,8 @@ class ProcessPairedMiniDataApiView(APIView):
 
 
 class ProcessPairedThermostatDataApiView(APIView):
-    """Supports custom device communication flow
+    """
+    Supports custom device communication flow
     in which pair of ioniq minis should recieved
     each others state trough redis stream
     """
@@ -496,7 +501,6 @@ class ProcessPairedThermostatDataApiView(APIView):
             )
 
 
-
 class ServiceThermostatDataRetrieveApiView(APIView):
     """
     Allow service access to thermostat data inside
@@ -506,14 +510,14 @@ class ServiceThermostatDataRetrieveApiView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, *args, **kwargs):
-
         serial_num = self.kwargs.get("serial_num")
 
         thermostat_data = dao.get_paired_thermostat_data(sn=serial_num)
         if thermostat_data is not None:
             thermostat_data.pop("token", None)
-        
+
         return Response(data=thermostat_data, status=200)
+
 
 class ServiceControllerDataRetrieveApiView(APIView):
     """
@@ -535,7 +539,7 @@ class ServiceControllerDataRetrieveApiView(APIView):
         controller_data.pop("token", None)
 
         boiler_data = dao.get_boiler_data(sn=serial_num)
-        
+
         if boiler_data is not None:
             logger.info("Redis info on boiler {} controller {}", boiler_data, serial_num)
             controller_data["boiler_type"] = boiler_data.get("boiler_type", None)
@@ -543,7 +547,7 @@ class ServiceControllerDataRetrieveApiView(APIView):
             logger.info("boiler type A {}", controller_data["boiler_type"])
         else:
             try:
-                controller = IoniqControllerModel.objects.select_related('boiler').get(serial_num = serial_num)
+                controller = IoniqControllerModel.objects.select_related('boiler').get(serial_num=serial_num)
             except IoniqControllerModel.DoesNotExist:
                 return Response(data={"detail": "Controller is not configured"}, status=400)
             wwsd = 0
@@ -553,7 +557,5 @@ class ServiceControllerDataRetrieveApiView(APIView):
                 controller_data["boiler_type"] = boiler_data.type
                 logger.info("boiler type B {}", controller_data["boiler_type"])
                 dao.set_boiler_data(sn=serial_num, payload={"type": boiler_data.type, "wwsd": wwsd})
-            
-
 
         return Response(data=controller_data, status=200)

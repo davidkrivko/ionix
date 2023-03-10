@@ -5,10 +5,10 @@ from devices.models import (
     SimpleSwitchModel,
     AnalogueThermostatModel,
 )
+from properties.models import ZoneModel
 from .choices import WEEK_DAYS
 from users.models import OwnerProfileModel
 import pytz
-
 
 
 class DeviceScheduleModel(models.Model):
@@ -17,7 +17,7 @@ class DeviceScheduleModel(models.Model):
         verbose_name = "Schedule window"
         verbose_name_plural = "Schedule windows"
         ordering = ['checkpoint']
-    
+
     week_day = models.SmallIntegerField(choices=WEEK_DAYS, default=1)
 
     checkpoint = models.DateTimeField(
@@ -62,7 +62,6 @@ class ThermostatSubscriberModel(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-
     def __str__(self) -> str:
         return f"{self.schedule} {self.thermostat}"
 
@@ -100,7 +99,6 @@ class HeatSwitchSubscriberModel(models.Model):
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-
 
     def __str__(self) -> str:
         return f"{self.schedule} {self.switch}"
@@ -140,11 +138,45 @@ class AnalogueThermostatSubscriberModel(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-
     def __str__(self) -> str:
         return f"{self.schedule} {self.analogue_thermostat}"
 
 
+class ZoneSubscriberModel(models.Model):
+    class Meta:
+        verbose_name = "Heating zone subscriber"
+        verbose_name_plural = "Heating zones subscribers"
+        ordering = ['-updated_at']
+
+    schedule = models.ForeignKey(
+        DeviceScheduleModel,
+        on_delete=models.CASCADE,
+        related_name="zones",
+        related_query_name="zone",
+    )
+
+    heating_zone = models.ForeignKey(
+        ZoneModel,
+        on_delete=models.CASCADE,
+        help_text="Smart thermostat which should be updated",
+    )
+
+    owner = models.ForeignKey(
+        OwnerProfileModel,
+        on_delete=models.CASCADE,
+        related_name="zone_schedules",
+        related_query_name="zone_schedule",
+        null=True,
+        blank=True,
+    )
+
+    setpoint = models.SmallIntegerField(null=True, help_text="Value to override smart thermostat setpoint field")
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self) -> str:
+        return f"{self.schedule} {self.heating_zone}"
 
 
 # class LandlordOffHoursScheduleModel(models.Model):

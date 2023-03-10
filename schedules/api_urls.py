@@ -1,4 +1,6 @@
-from django.urls import path
+from django.urls import path, include
+from rest_framework import routers
+
 from .api import (
     ScheduleChoicesListView,
     ###
@@ -17,12 +19,18 @@ from .api import (
     ScheduleAnalogueSubscriberApiView,
     ScheduleAnalogueSubscriberCreateApiView,
     ScheduleAnalogueSubscriberDeleteApiView,
+    ###
+    ZoneSubscriberViewSet,
 )
+
+
+router = routers.DefaultRouter()
+router.register("zones", ZoneSubscriberViewSet, basename="zones")
 
 
 urlpatterns = [
     path('options/<int:weekday>/', ScheduleChoicesListView.as_view()),
-    
+
     # owner thermostats scheduling
     path('thermostats/', ScheduleSubscriberApiView.as_view()),
     path('thermostats/create/', ScheduleSubscriberCreateApiView.as_view()),
@@ -40,4 +48,6 @@ urlpatterns = [
     path('analogue-thermostats/', ScheduleAnalogueSubscriberApiView.as_view()),
     path('analogue-thermostats/create/', ScheduleAnalogueSubscriberCreateApiView.as_view()),
     path('analogue-thermostats/delete/', ScheduleAnalogueSubscriberDeleteApiView.as_view()),
+
+    path('', include(router.urls))
 ]

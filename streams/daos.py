@@ -233,7 +233,7 @@ class RedisDao(AbstractDaoClass):
         connect = get_redis_connection("streams")
         connect.set(key, setpoint)
         connect.expire(key, TTL)
-        return 
+        return
 
     def get_thermostat_setpoint(self, sn: str):
         key = streams_key_schema.thermostat_setpoint_key(sn)
@@ -251,5 +251,6 @@ class RedisDao(AbstractDaoClass):
         raw_data = connect.hgetall(key)
         data = decode_redis_hash(raw_data)
         return data
+
 
 redis_dao = RedisDao()

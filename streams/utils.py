@@ -8,12 +8,14 @@ now = timezone.now
 DEVICE_ONLINE_STATUS_DELTA_SEC = settings.DEVICE_ONLINE_STATUS_DELTA_SEC
 dao = RedisDao()
 
+
 def flush_redis_streams(self):
     get_redis_connection("streams").flushall()
 
 
 def fetch_online_status_from_online_stream(sn: str, device: str) -> object:
-    """Searches serial number in redis stream of devices online status
+    """
+    Searches serial number in redis stream of devices online status
     and returns bool response in a context object
 
     Args:
@@ -38,7 +40,7 @@ def fetch_online_status_from_online_stream(sn: str, device: str) -> object:
         ctx['data'] = False
         return ctx
 
-    timestamp_str =  record[0][1][b'timestamp'].decode('utf-8')
+    timestamp_str = record[0][1][b'timestamp'].decode('utf-8')
     timestamp = dateparse.parse_datetime(timestamp_str)
     delta = now() - timestamp
     
@@ -50,8 +52,6 @@ def fetch_online_status_from_online_stream(sn: str, device: str) -> object:
         ctx['detail'] = f"Timedelta (last seen online) [{delta.seconds} s] status exceeds limit [{DEVICE_ONLINE_STATUS_DELTA_SEC} s]"
 
     return ctx
-
-
 
 
 def fetch_device_data_from_data_stream(sn: str, device: str) -> object:

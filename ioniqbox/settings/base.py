@@ -210,5 +210,5 @@ DEFAULT_FROM_EMAIL = "alert@ioniqbox.com"
 DEFAULT_ADMIN_EMAIL = "admin@twinkle.nyc"
 
 
-CORS_ALLOW_ALL_ORIGINS = True
+CORS_ORIGIN_ALLOW_ALL = True
 

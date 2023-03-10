@@ -1,4 +1,3 @@
-from tabnanny import verbose
 from django.db import models
 from devices.models import (
     AnalogueThermostatModel, 
@@ -7,6 +6,7 @@ from devices.models import (
     SimpleSwitchModel,
 )
 from .choices import ZONE_TYPES, ROOM_TYPES
+
 
 class ZipCodeModel(models.Model):
 
@@ -41,9 +41,9 @@ class ZipCodeModel(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-
     def __str__(self) -> str:
         return f"{self.zip_code} {self.updated_at}"
+
 
 class ZoneAbstractModel(models.Model):
 
@@ -56,9 +56,9 @@ class ZoneAbstractModel(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
 
-
 class ZoneModel(ZoneAbstractModel):
-    """Zone model describes heating loop only
+    """
+    Zone model describes heating loop only
     """
     class Meta:
         verbose_name = "Heating zone"
@@ -86,7 +86,6 @@ class ZoneModel(ZoneAbstractModel):
 
     def __str__(self) -> str:
         return f"{self.name} {self.controller} "
-
 
 
 class PropertyAbstractModel(models.Model):
@@ -205,7 +204,6 @@ class RoomModel(PropertyAbstractModel):
         verbose_name = "Rooom"
         verbose_name_plural = "Rooms"
         ordering = ['-created_at']
-    
 
     size = models.SmallIntegerField(
         null=True,
@@ -278,7 +276,6 @@ class ApartmentAlertDetailsModel(models.Model):
     details = models.TextField(default='')    
 
     created_at = models.DateTimeField(auto_now_add=True)
-
 
     def __str__(self) -> str:
         return f"{self.created_at.date()} {self.apartment}"

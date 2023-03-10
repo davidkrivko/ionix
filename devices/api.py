@@ -1,5 +1,6 @@
 from datetime import timezone
 from django_q.tasks import async_task
+from rest_framework import generics, mixins, viewsets
 from rest_framework.views import APIView
 from rest_framework.generics import ListAPIView, RetrieveAPIView, RetrieveUpdateAPIView
 from rest_framework.response import Response
@@ -18,6 +19,7 @@ from .serializers import (
     DeviceIdSerializer,
     SmartThermostatModelSerializer,
     NameFieldSerializer,
+    BoilerHealthStatusSerializer,
 )
 from .models import (
     AnalogueThermostatModel,
@@ -41,7 +43,7 @@ DEVICE_ONLINE_STATUS_DELTA_SEC = settings.DEVICE_ONLINE_STATUS_DELTA_SEC
 class OwnSmartThermostatsList(ListAPIView):
 
     serializer_class = SmartThermostatModelSerializer
-    permission_classses = [IsAuthenticated]
+    permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
         owner = self.request.user.owner
@@ -51,7 +53,7 @@ class OwnSmartThermostatsList(ListAPIView):
 
 class GetThermostatDataFromStream(APIView):
 
-    permission_classses = [IsAuthenticated]
+    permission_classes = [IsAuthenticated]
 
     def get(self, request, *args, **kwargs):
         thermostat_serial = self.kwargs.get("serial")
@@ -174,7 +176,8 @@ class ThermostatDataBySerialNumber(APIView):
 
 
 class ThermostatSetTemperatureApiView(APIView):
-    """Allow thermostat owner to write set temperature
+    """
+    Allow thermostat owner to write set temperature
     value/command
     """
 
@@ -460,7 +463,8 @@ class HeatSwitchStatusUpdateApiView(APIView):
 
 # NB and permissions check
 class AnalogueThermostatStatusUpdateApiView(APIView):
-    """Allow heat switcher status update
+    """
+    Allow heat switcher status update
     for tenants and owners
     """
 
@@ -531,6 +535,16 @@ class RetrieveDeviceZoneStatusApiView(APIView):
         else:
             ctx["detail"] = serializer.error_messages
             return Response(ctx, status=500)
+
+
+class BoilerHealthStatusView(generics.RetrieveAPIView):
+    serializer_class = BoilerHealthStatusSerializer
+    lookup_field = "serial_num"
+
+    def get_object(self):
+        obj = BoilerModel.objects.get(serial_num=self.kwargs["serial_num"])
+
+        return obj
 
 
 class BoilerListApiView(ListAPIView):

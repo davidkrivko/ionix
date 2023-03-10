@@ -9,8 +9,10 @@ from django_q.tasks import async_task, async_iter
 from devices.utils import insert_weather_data
 from dateutil.relativedelta import relativedelta
 
+
 def parse_temp_from_weathergov(zip_pk: int):
-    """Extracts lat and lon records from the
+    """
+    Extracts lat and lon records from the
     ZipCode model and saves last observ. temp in it.
 
     Args:
@@ -26,7 +28,7 @@ def parse_temp_from_weathergov(zip_pk: int):
         logging.warning("Lat and Lon coord-s are not set")
         return
 
-    headers = { 
+    headers = {
             f"User-Agent": "Ioniqbox <alert@ioniqbox.com>"
         }
 
@@ -34,6 +36,7 @@ def parse_temp_from_weathergov(zip_pk: int):
 
     grid_response = requests.get(GRID_POINTS_LINK, headers=headers)
 
+    stations_endpoint = None
     if grid_response.status_code == 200:
         stations_endpoint = grid_response.json()['properties']['observationStations']
 
@@ -62,17 +65,15 @@ def parse_temp_from_weathergov(zip_pk: int):
                 zip_obj.todays_temp = temperature_f
                 zip_obj.save()
 
-                async_task('devices.utils.insert_weather_data', zip_obj.zip_code, temperature_f, temperature_c)
+                # async_task('devices.utils.insert_weather_data', zip_obj.zip_code, temperature_f, temperature_c)
 
-                # WeatherRecordModel.objects.create(
-                #     zip_code = zip_obj,
-                #     temp_f = temperature_f,
-                #     temp_c = temperature_c,
-                # )  
+                WeatherRecordModel.objects.create(
+                    zip_code=zip_obj,
+                    temp_f=temperature_f,
+                    temp_c=temperature_c,
+                )
 
     return f"Temp F {temperature_f}"
-
-
 
 
 def migrate_temp_records():
@@ -81,10 +82,9 @@ def migrate_temp_records():
     from Django to remote cold db
     """
     print("WeatherRecordModel.objects.all()", WeatherRecordModel.objects.all())
-    iter = [ obj.pk for obj in WeatherRecordModel.objects.all()]
+    iter = [obj.pk for obj in WeatherRecordModel.objects.all()]
     print("iter", iter)
     async_iter('api.utils.migrate_temp_record', iter)
-
 
 
 def migrate_temp_record(record_pk: int):
@@ -101,6 +101,5 @@ def migrate_temp_record(record_pk: int):
     temp_f = record.temp_f
     real_time = record.created_at
     # print("real_time", real_time)
-
 
     insert_weather_data(zip_code, temp_f, temp_c, real_time=real_time)

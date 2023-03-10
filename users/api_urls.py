@@ -26,7 +26,7 @@ urlpatterns = [
     path('me/', ProfileDataApiView.as_view()),
     path('tenant/rooms/', RoomsListApiView.as_view()),
     path('tenant/getboilerid/', GetBoilerIdApiView.as_view()),
-    
+
     path('owner/building/', BuildingListApiView.as_view()),
     path('owner/apartments/', ApartmentsListApiView.as_view()),
     path('owner/apartment/limits/', ApartmentThermostatRangeApiView.as_view()),

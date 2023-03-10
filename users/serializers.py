@@ -4,30 +4,27 @@ from .models import TenantProfileModel
 
 
 class NameSerializer(serializers.Serializer):
-
     first_name = serializers.CharField(max_length=60)
     email = serializers.EmailField(required=False)
 
 
 class UserIdSerializer(serializers.Serializer):
-
     id = serializers.IntegerField()
     email = serializers.EmailField(required=False)
 
-class PasswordUpdateSerializer(serializers.Serializer):
 
+class PasswordUpdateSerializer(serializers.Serializer):
     old_password = serializers.CharField(required=False)
     new_password = serializers.CharField()
 
 
 class TenantModelSerializer(serializers.ModelSerializer):
-
     rooms_ids = serializers.PrimaryKeyRelatedField(many=True, write_only=True, queryset=RoomModel.objects.all())
     email = serializers.EmailField(required=False)
 
     class Meta:
         model = TenantProfileModel
-        fields='__all__'
+        fields = '__all__'
 
     def create(self, validated_data):
         

@@ -58,6 +58,12 @@ class HeatSwitchStatusSerializer(serializers.Serializer):
     status = serializers.BooleanField()
 
 
+class BoilerHealthStatusSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = BoilerModel
+        fields = ("health_status",)
+
+
 class BoilerShutDownTempSerializer(serializers.Serializer):
 
     boiler_id = serializers.IntegerField()
