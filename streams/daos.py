@@ -247,7 +247,9 @@ class RedisDao(AbstractDaoClass):
     def set_boiler_data(self, sn: str, payload: dict):
         logger.info("Changing boiler data")
         key = streams_key_schema.boiler_data_key(sn)
+        logger.info(f"{key}")
         connect = get_redis_connection("streams")
+        logger.info(f"{connect}")
         return connect.hmset(key, payload)
 
     def get_boiler_data(self, sn: str):
