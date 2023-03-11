@@ -1,8 +1,14 @@
 import os
-
+import logging
 import redis
 
+
 from workers.tasks import trigger_warm_weather_shutdown_check
+
+
+logger = logging.getLogger('django')
+logger.setLevel(logging.INFO)
+
 
 r = redis.Redis(
     host=os.environ.get("REDIS_HOST"),
@@ -14,6 +20,7 @@ r = redis.Redis(
 p = r.pubsub()
 
 p.subscribe('mychannel')
+logger.info("We are in redis_loop")
 
 for message in p.listen():
     if message['data'] == b'run myfunction':
