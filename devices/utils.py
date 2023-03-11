@@ -3,195 +3,195 @@ import os
 from datetime import datetime
 import numpy as np
 
-try:
-    import zoneinfo
-except ImportError:
-    from backports import zoneinfo
-from sqlalchemy import create_engine
-
-from sqlalchemy.pool import NullPool
-from sqlalchemy import desc
-from sqlalchemy import (
-    Table,
-    Column,
-    String,
-    DateTime,
-    MetaData,
-    SmallInteger,
-    Integer,
-    BigInteger,
-    Numeric,
-    Float,
-    Text,
-)
-from django.conf import settings
-from django.utils import timezone
-from sqlalchemy.sql.sqltypes import Boolean
-from streams.daos import RedisDao
-
-dao = RedisDao()
-now = timezone.now
-
-IOT_DB_NAME = settings.IOT_DB_NAME
-IOT_DB_USER = settings.IOT_DB_USER
-IOT_DB_PASSWORD = settings.IOT_DB_PASSWORD
-IOT_DB_HOST = settings.IOT_DB_HOST
-THERMOSTAT_QUERY_LIMIT = 1
-
-DB_STRING = f"postgresql://{IOT_DB_USER}:{IOT_DB_PASSWORD}@{IOT_DB_HOST}/{IOT_DB_NAME}"
-db = create_engine(DB_STRING)
-meta = MetaData(db)
-
-# USER = os.environ.get("RDS_USERNAME")
-# HOST = os.environ.get("RDS_HOSTNAME")
-# DB_NAME = os.environ.get("RDS_DB_NAME")
-# PORT = os.environ.get("25060")
-# PASSWORD = os.environ.get("RDS_PASSWORD")
+# try:
+#     import zoneinfo
+# except ImportError:
+#     from backports import zoneinfo
+# from sqlalchemy import create_engine
 #
-# DB = f"postgresql://{USER}:{PASSWORD}@{HOST}:{PORT}/{DB_NAME}?sslmode=require"
-# db = create_engine(DB)
+# from sqlalchemy.pool import NullPool
+# from sqlalchemy import desc
+# from sqlalchemy import (
+#     Table,
+#     Column,
+#     String,
+#     DateTime,
+#     MetaData,
+#     SmallInteger,
+#     Integer,
+#     BigInteger,
+#     Numeric,
+#     Float,
+#     Text,
+# )
+# from django.conf import settings
+# from django.utils import timezone
+# from sqlalchemy.sql.sqltypes import Boolean
+# from streams.daos import RedisDao
+#
+# dao = RedisDao()
+# now = timezone.now
+#
+# IOT_DB_NAME = settings.IOT_DB_NAME
+# IOT_DB_USER = settings.IOT_DB_USER
+# IOT_DB_PASSWORD = settings.IOT_DB_PASSWORD
+# IOT_DB_HOST = settings.IOT_DB_HOST
+# THERMOSTAT_QUERY_LIMIT = 1
+#
+# DB_STRING = f"postgresql://{IOT_DB_USER}:{IOT_DB_PASSWORD}@{IOT_DB_HOST}/{IOT_DB_NAME}"
+# db = create_engine(DB_STRING)
 # meta = MetaData(db)
-
-
-thermostatdata = Table(
-    "thermostatdata",
-    meta,
-    Column("sn", String),
-    Column("roomtemp", Numeric),
-    Column("settpoint", SmallInteger),
-    Column("status", SmallInteger),
-    Column("real_time", DateTime),
-    Column("id", BigInteger),
-)
-
-
-online_status = Table(
-    "online_status",
-    meta,
-    Column("sn", String),
-    Column("realtime", DateTime),
-    Column("id", BigInteger),
-)
-
-devicedata = Table(
-    "devicedata",
-    meta,
-    Column("sn", String),
-    Column("id", BigInteger),
-    Column("real_time", DateTime),
-    Column("time", DateTime),
-    Column("zone", String),
-    Column("endswitch", SmallInteger),
-    Column("icsmain", Float),
-    Column("icsz1", Float),
-    Column("icsz2", Float),
-    Column("icsz3", Float),
-    Column("icsboiler", Float),
-    Column("t1", SmallInteger),
-    Column("t2", SmallInteger),
-    Column("t3", SmallInteger),
-    Column("t4", SmallInteger),
-    Column("t5", SmallInteger),
-    Column("t6", SmallInteger),
-    Column("t7", SmallInteger),
-    Column("rt1", SmallInteger),
-    Column("rt2", SmallInteger),
-    Column("rt3", SmallInteger),
-    Column("ps", SmallInteger),
-)
-
-ioniqmaxdata = Table(
-    "ioniqmaxdata",
-    meta,
-    Column("sn", String),
-    Column("id", BigInteger),
-    Column("real_time", DateTime),
-    Column("endswitch", SmallInteger),
-    Column("icsmain", Float),
-    Column("icsz1", Float),
-    Column("icsz2", Float),
-    Column("icsz3", Float),
-    Column("icsboiler", Float),
-    Column("t1", SmallInteger),
-    Column("t2", SmallInteger),
-    Column("t3", SmallInteger),
-    Column("t4", SmallInteger),
-    Column("t5", SmallInteger),
-    Column("t6", SmallInteger),
-    Column("t7", SmallInteger),
-    Column("rt1", SmallInteger),
-    Column("rt2", SmallInteger),
-    Column("rt3", SmallInteger),
-    Column("ps", SmallInteger),
-)
-
-ioniqminidata = Table(
-    "ioniqminidata",
-    meta,
-    Column("id", BigInteger),
-    Column("sn", String),
-    Column("systemp", Numeric),
-    Column("endswitch", SmallInteger),
-    Column("real_time", DateTime),
-)
-
-devicevariables = Table(
-    "devicevariables",
-    meta,
-    Column("id", BigInteger),
-    Column("sn", String),
-    Column("rt1", SmallInteger),
-    Column("rt2", SmallInteger),
-    Column("rt3", SmallInteger),
-    Column("blr", SmallInteger),
-    Column("allof", SmallInteger),
-    Column("wifiid", Text),
-    Column("wifipass", Text),
-    Column("time", DateTime),
-)
-
-devicezonestatus = Table(
-    "devicezonestatus",
-    meta,
-    Column("id", BigInteger),
-    Column("sn", String),
-    Column("rt", SmallInteger),
-    Column("state", SmallInteger),
-    Column("time", DateTime),
-)
-
-wwsd = Table(
-    "wwsd",
-    meta,
-    Column("id", BigInteger),
-    Column("sn", String),
-    Column("setpoint", SmallInteger),
-    Column("enabled", Boolean),
-    Column("active", Boolean),
-)
-
-zip_temp_records = Table(
-    "zip_temp_records",
-    meta,
-    Column("id", BigInteger),
-    Column("zip_code", String),
-    Column("temp_f", SmallInteger),
-    Column("temp_c", SmallInteger),
-    Column("real_time", DateTime),
-)
-
-systemdata = Table(
-    "systemdata",
-    meta,
-    Column("id", BigInteger),
-    Column("sn", String),
-    Column("signal_level", SmallInteger),
-    Column("cpu_temp", SmallInteger),
-    Column("codebase_ver", String),
-    Column("last_reload_dt", DateTime),
-    Column("reloads_num", Integer),
-    Column("realtime", DateTime),
-)
+#
+# # USER = os.environ.get("RDS_USERNAME")
+# # HOST = os.environ.get("RDS_HOSTNAME")
+# # DB_NAME = os.environ.get("RDS_DB_NAME")
+# # PORT = os.environ.get("25060")
+# # PASSWORD = os.environ.get("RDS_PASSWORD")
+# #
+# # DB = f"postgresql://{USER}:{PASSWORD}@{HOST}:{PORT}/{DB_NAME}?sslmode=require"
+# # db = create_engine(DB)
+# # meta = MetaData(db)
+#
+#
+# thermostatdata = Table(
+#     "thermostatdata",
+#     meta,
+#     Column("sn", String),
+#     Column("roomtemp", Numeric),
+#     Column("settpoint", SmallInteger),
+#     Column("status", SmallInteger),
+#     Column("real_time", DateTime),
+#     Column("id", BigInteger),
+# )
+#
+#
+# online_status = Table(
+#     "online_status",
+#     meta,
+#     Column("sn", String),
+#     Column("realtime", DateTime),
+#     Column("id", BigInteger),
+# )
+#
+# devicedata = Table(
+#     "devicedata",
+#     meta,
+#     Column("sn", String),
+#     Column("id", BigInteger),
+#     Column("real_time", DateTime),
+#     Column("time", DateTime),
+#     Column("zone", String),
+#     Column("endswitch", SmallInteger),
+#     Column("icsmain", Float),
+#     Column("icsz1", Float),
+#     Column("icsz2", Float),
+#     Column("icsz3", Float),
+#     Column("icsboiler", Float),
+#     Column("t1", SmallInteger),
+#     Column("t2", SmallInteger),
+#     Column("t3", SmallInteger),
+#     Column("t4", SmallInteger),
+#     Column("t5", SmallInteger),
+#     Column("t6", SmallInteger),
+#     Column("t7", SmallInteger),
+#     Column("rt1", SmallInteger),
+#     Column("rt2", SmallInteger),
+#     Column("rt3", SmallInteger),
+#     Column("ps", SmallInteger),
+# )
+#
+# ioniqmaxdata = Table(
+#     "ioniqmaxdata",
+#     meta,
+#     Column("sn", String),
+#     Column("id", BigInteger),
+#     Column("real_time", DateTime),
+#     Column("endswitch", SmallInteger),
+#     Column("icsmain", Float),
+#     Column("icsz1", Float),
+#     Column("icsz2", Float),
+#     Column("icsz3", Float),
+#     Column("icsboiler", Float),
+#     Column("t1", SmallInteger),
+#     Column("t2", SmallInteger),
+#     Column("t3", SmallInteger),
+#     Column("t4", SmallInteger),
+#     Column("t5", SmallInteger),
+#     Column("t6", SmallInteger),
+#     Column("t7", SmallInteger),
+#     Column("rt1", SmallInteger),
+#     Column("rt2", SmallInteger),
+#     Column("rt3", SmallInteger),
+#     Column("ps", SmallInteger),
+# )
+#
+# ioniqminidata = Table(
+#     "ioniqminidata",
+#     meta,
+#     Column("id", BigInteger),
+#     Column("sn", String),
+#     Column("systemp", Numeric),
+#     Column("endswitch", SmallInteger),
+#     Column("real_time", DateTime),
+# )
+#
+# devicevariables = Table(
+#     "devicevariables",
+#     meta,
+#     Column("id", BigInteger),
+#     Column("sn", String),
+#     Column("rt1", SmallInteger),
+#     Column("rt2", SmallInteger),
+#     Column("rt3", SmallInteger),
+#     Column("blr", SmallInteger),
+#     Column("allof", SmallInteger),
+#     Column("wifiid", Text),
+#     Column("wifipass", Text),
+#     Column("time", DateTime),
+# )
+#
+# devicezonestatus = Table(
+#     "devicezonestatus",
+#     meta,
+#     Column("id", BigInteger),
+#     Column("sn", String),
+#     Column("rt", SmallInteger),
+#     Column("state", SmallInteger),
+#     Column("time", DateTime),
+# )
+#
+# wwsd = Table(
+#     "wwsd",
+#     meta,
+#     Column("id", BigInteger),
+#     Column("sn", String),
+#     Column("setpoint", SmallInteger),
+#     Column("enabled", Boolean),
+#     Column("active", Boolean),
+# )
+#
+# zip_temp_records = Table(
+#     "zip_temp_records",
+#     meta,
+#     Column("id", BigInteger),
+#     Column("zip_code", String),
+#     Column("temp_f", SmallInteger),
+#     Column("temp_c", SmallInteger),
+#     Column("real_time", DateTime),
+# )
+#
+# systemdata = Table(
+#     "systemdata",
+#     meta,
+#     Column("id", BigInteger),
+#     Column("sn", String),
+#     Column("signal_level", SmallInteger),
+#     Column("cpu_temp", SmallInteger),
+#     Column("codebase_ver", String),
+#     Column("last_reload_dt", DateTime),
+#     Column("reloads_num", Integer),
+#     Column("realtime", DateTime),
+# )
 
 
 def get_thermostat_data(serial_num: str) -> list:

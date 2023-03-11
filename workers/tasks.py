@@ -1,11 +1,13 @@
-from devices.models import BoilerModel
-from schedules.models import DeviceScheduleModel
-from properties.models import ApartmentModel, RoomModel, ZipCodeModel
 from django_q.tasks import async_iter, async_task
 from django.utils import timezone
 import logging
 
 from users.models import TenantProfileModel
+from api.utils import parse_temp_from_weathergov
+from devices.models import BoilerModel
+from schedules.models import DeviceScheduleModel
+from properties.models import ApartmentModel, RoomModel, ZipCodeModel
+from streams.daos import redis_dao
 
 now = timezone.now
 logger = logging.getLogger('django')
@@ -23,7 +25,8 @@ def trigger_warm_weather_shutdown_check():
 
     iter = [obj.pk for obj in ZipCodeModel.objects.all()]
     logger.info(f"First function {iter}")
-    async_iter('workers.tasks.check_boiler_settings', iter)
+    for zip_pk in iter:
+        check_boiler_settings(zip_pk)
 
 
 def check_boiler_settings(zip_pk: int):
@@ -45,10 +48,15 @@ def check_boiler_settings(zip_pk: int):
         # boiler_rooms = building.boiler_rooms.all()
         # for boiler_room in boiler_rooms:
         #     boiler = boiler_room.boiler
-        if building.boiler.shutdown_enabled is True:
-            # trigger actual comparator function and endswitch tooggler
-            logger.info("Condition is active")
-            async_task('workers.tasks.check_actuality_data', building.boiler.pk, zip_pk)
+
+        try:
+            logger.info(f"{building.boiler}, {building.boiler.shutdown_enabled}")
+            if building.boiler.shutdown_enabled is True:
+                # trigger actual comparator function and endswitch tooggler
+                logger.info("Condition is active")
+                check_actuality_data(building.boiler.pk, zip_pk)
+        except:
+            continue
     return "OK"
 
 
@@ -100,7 +108,7 @@ def check_actuality_data(boiler_pk: int, zip_pk: int):
     if not is_actual:
         try:
             logger.info("Temperature is not actual")
-            async_task("api.utils.parse_temp_from_weathergov", zip_pk)
+            parse_temp_from_weathergov(zip_pk)
         except:
             logger.info("ZIP code is invalid")
             logging.warning("ZIP code is invalid")
@@ -117,7 +125,7 @@ def check_actuality_data(boiler_pk: int, zip_pk: int):
     payload = {
         "wwsd": value
     }
-    async_task("streams.daos.set_boiler_data", controller, payload)
+    redis_dao.set_boiler_data(controller.serial_num, payload)
     boiler.save()
 
     logger.info("Done!")
