@@ -3,6 +3,8 @@ import os
 from datetime import datetime
 import numpy as np
 
+from streams.daos import RedisDao
+
 # try:
 #     import zoneinfo
 # except ImportError:
@@ -29,7 +31,7 @@ import numpy as np
 # from sqlalchemy.sql.sqltypes import Boolean
 # from streams.daos import RedisDao
 #
-# dao = RedisDao()
+dao = RedisDao()
 # now = timezone.now
 #
 # IOT_DB_NAME = settings.IOT_DB_NAME
