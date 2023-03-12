@@ -14,7 +14,7 @@ from django.utils.timezone import now
 from django.utils import dateparse
 
 from streams.daos import RedisDao
-from devices.utils import dao
+# from devices.utils import dao
 
 
 def process_ioniq_max_with_related_thermostats(serial_num: str) -> int:
