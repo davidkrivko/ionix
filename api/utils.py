@@ -17,7 +17,6 @@ logger = logging.getLogger('django')
 logger.setLevel(logging.INFO)
 
 
-
 def parse_temp_from_weathergov(zip_pk: int):
     """
     Extracts lat and lon records from the
@@ -47,7 +46,7 @@ def parse_temp_from_weathergov(zip_pk: int):
     stations_endpoint = None
     if grid_response.status_code == 200:
         stations_endpoint = grid_response.json()['properties']['observationStations']
-
+        logger.info(f"We are in first parce page")
     station = None
     temperature_f = None
 
@@ -57,7 +56,7 @@ def parse_temp_from_weathergov(zip_pk: int):
 
         if stations_list_response.status_code == 200:
             station = stations_list_response.json()['observationStations'][0]
-
+            logger.info(f"We are in second parce page")
     if station is not None:
         observations_endpoint = station + '/observations/latest/'
         observations_response = requests.get(observations_endpoint)
@@ -65,7 +64,7 @@ def parse_temp_from_weathergov(zip_pk: int):
         if observations_response.status_code == 200:
 
             temperature_c = observations_response.json()['properties']['temperature']['value']
-
+            logger.info(f"We are in third parce page {temperature_c}")
             temperature_f = None
             if temperature_c is not None:
                 temperature_f = (temperature_c * 9/5) + 32

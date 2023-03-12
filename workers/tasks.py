@@ -1,6 +1,6 @@
-from django_q.tasks import async_iter, async_task
-from django.utils import timezone
 import logging
+import datetime
+from django_q.tasks import async_task, async_iter
 
 from users.models import TenantProfileModel
 from api.utils import parse_temp_from_weathergov
@@ -9,7 +9,8 @@ from schedules.models import DeviceScheduleModel
 from properties.models import ApartmentModel, RoomModel, ZipCodeModel
 from streams.daos import redis_dao
 
-now = timezone.now
+now = datetime.datetime.now().timestamp()
+
 logger = logging.getLogger('django')
 logger.setLevel(logging.INFO)
 
@@ -25,8 +26,7 @@ def trigger_warm_weather_shutdown_check():
 
     iter = [obj.pk for obj in ZipCodeModel.objects.all()]
     logger.info(f"First function {iter}")
-    for zip_pk in iter:
-        check_boiler_settings(zip_pk)
+    async_iter("workers.tasks.check_boiler_settings", iter)
 
 
 def check_boiler_settings(zip_pk: int):
@@ -43,18 +43,14 @@ def check_boiler_settings(zip_pk: int):
         return
 
     buildings = zip.buildings.all()
+    logger.info(f"{buildings}, ZIP CODE {zip.zip_code}")
     for building in buildings:
-
-        # boiler_rooms = building.boiler_rooms.all()
-        # for boiler_room in boiler_rooms:
-        #     boiler = boiler_room.boiler
-
         try:
             logger.info(f"{building.boiler}, {building.boiler.shutdown_enabled}")
             if building.boiler.shutdown_enabled is True:
                 # trigger actual comparator function and endswitch tooggler
                 logger.info("Condition is active")
-                check_actuality_data(building.boiler.pk, zip_pk)
+                async_task("workers.tasks.check_actuality_data", building.boiler.pk, zip_pk)
         except:
             continue
     return "OK"
@@ -100,37 +96,42 @@ def check_actuality_data(boiler_pk: int, zip_pk: int):
     zip_model = ZipCodeModel.objects.get(pk=zip_pk)
     boiler = BoilerModel.objects.get(pk=boiler_pk)
     shutdown_temp = boiler.shutdown_temp  # Current settings for the shutdown temp
-    update_date = zip_model.updated_at.date()
+    update_time = zip_model.updated_at.timestamp()
     controller = boiler.ioniq_controllers.first()
     value = 2
 
-    is_actual = update_date == now().date()
+    time_delta = now - update_time
+
+    logger.info(f"{boiler.serial_num}")
+
+    is_actual = True if time_delta < 1800 else False
     if not is_actual:
         try:
             logger.info("Temperature is not actual")
-            parse_temp_from_weathergov(zip_pk)
+            async_task("api.utils.parse_temp_from_weathergov", zip_pk)
         except:
             logger.info("ZIP code is invalid")
             logging.warning("ZIP code is invalid")
     if zip_model.todays_temp >= shutdown_temp:
         boiler.shutdown_active = True
-        value = 0
+        value = 1
         logger.info("zip_model.todays_temp >= shutdown_temp")
     if zip_model.todays_temp < shutdown_temp:
         boiler.shutdown_active = False
-        value = 1
-        logger.info("zip_model.todays_temp >= shutdown_temp")
+        value = 0
+        logger.info("zip_model.todays_temp < shutdown_temp")
 
     logger.info(f"wwsd = {value}")
     payload = {
         "wwsd": value
     }
+    logger.info(f"{controller.serial_num}")
     redis_dao.set_boiler_data(controller.serial_num, payload)
     boiler.save()
 
     logger.info("Done!")
 
-    return ("Boiler WWSD status:", value)
+    return f"Boiler WWSD status: {value}"
 
 
 # SCHEDULE TASK WORKERS

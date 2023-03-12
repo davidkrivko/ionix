@@ -18,7 +18,7 @@ ALLOWED_HOSTS = [
     'do-api.ionix-staging.com',
 ]
 
-CORS_ALLOWED_ORIGINS = ['https://app.turnonheat.com']
+CORS_ALLOWED_ORIGINS = ['https://panel.turnonheat.com']
 
 
 REDIS_HOST = os.environ.get("REDIS_HOST")
@@ -53,23 +53,6 @@ CACHES = {
 
 
 # ASYNC BACKGROUND TASKS
-Q_CLUSTER = {
-    'name': 'IoniqboxAsyncQueue',
-    'timeout': 90,
-    'retry': 120,
-    'django_redis': 'queue',
-}
-
-
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'mail.ioniqbox.com'
-EMAIL_USE_TLS = True
-EMAIL_PORT = 587
-EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
-EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
-# ADD DEFAULT EMAIL
-DEFAULT_FROM_EMAIL = "alert@ioniqbox.com"
-DEFAULT_ADMIN_EMAIL = "admin@twinkle.nyc"
 
 AUTH_PASSWORD_VALIDATORS = []
 
