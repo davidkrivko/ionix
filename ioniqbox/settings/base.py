@@ -191,6 +191,7 @@ DEVICE_ONLINE_STATUS_DELTA_SEC = 10
 # REDIS STREAM SETTINGS
 REDIS_STREAM_MAX_LEN = 21600
 
+
 Q_CLUSTER = {
     'name': 'IoniqboxAsyncQueue',
     'timeout': 90,
