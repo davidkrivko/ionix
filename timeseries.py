@@ -1,3 +1,5 @@
+import os
+
 from redistimeseries.client import Client as RedisTimeSeries
 import time
 import sys
@@ -8,10 +10,10 @@ import random
 print(' \n '.join(sys.path))
 
 redis = RedisTimeSeries(
-    username="default",
-    password="AVNS_D7tNG5W4o3c7IiXu5tF",
-    host="db-redis-nyc1-75696-do-user-13548984-0.b.db.ondigitalocean.com",
-    port=25061,
+    username=os.environ.get("REDIS_NAME"),
+    password=os.environ.get("REDIS_PASSWORD"),
+    host=os.environ.get("REDIS_HOST"),
+    port=os.environ.get("REDIS_PORT"),
 )
 # redis.flushdb()
 key = 'temperature'
