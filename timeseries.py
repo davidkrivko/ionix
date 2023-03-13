@@ -1,3 +1,5 @@
+import os
+
 from redistimeseries.client import Client as RedisTimeSeries
 import time
 import sys
@@ -7,7 +9,12 @@ import random
 
 print(' \n '.join(sys.path))
 
-redis = RedisTimeSeries(host='redis-10587.c233.eu-west-1-1.ec2.cloud.redislabs.com', port=10587, password='c2FpvbfRyqHeojcdq2G1C2GIiPtLCZbK')
+redis = RedisTimeSeries(
+    username=os.environ.get("REDIS_NAME"),
+    password=os.environ.get("REDIS_PASSWORD"),
+    host=os.environ.get("REDIS_HOST"),
+    port=os.environ.get("REDIS_PORT"),
+)
 # redis.flushdb()
 key = 'temperature'
 
@@ -22,63 +29,63 @@ def create(key):
 def store(key, interval):
     print("\n Append new value to time series:\n")
     begin_time = int(time.time())
-    
-    for i in range(interval):
-            timestamp = int(time.time())
-            value = round(random.uniform(0.0, 100.0), 2)
-            timestamp_strftime = datetime.datetime.fromtimestamp(timestamp).strftime('%Y-%m-%d %H:%M:%S')
-            sys.stdout.write(' %s : %.2f \n' % (timestamp_strftime, value))
-            sys.stdout.flush()
-            # redis.add(key,timestamp,value,retentionSecs=30, labels={'sensor_id' : 2,'area_id' : 32})
-            redis.add(key, timestamp, value, retention_msecs=30000, labels={'sensor_id': 2,'area_id': 32})
-            time.sleep(1)
 
-    end_time = int(time.time()-1)
-    
+    for i in range(interval):
+        timestamp = int(time.time())
+        value = round(random.uniform(0.0, 100.0), 2)
+        timestamp_strftime = datetime.datetime.fromtimestamp(timestamp).strftime('%Y-%m-%d %H:%M:%S')
+        sys.stdout.write(' %s : %.2f \n' % (timestamp_strftime, value))
+        sys.stdout.flush()
+        # redis.add(key,timestamp,value,retentionSecs=30, labels={'sensor_id' : 2,'area_id' : 32})
+        redis.add(key, timestamp, value, retention_msecs=30000, labels={'sensor_id': 2, 'area_id': 32})
+        time.sleep(1)
+
+    end_time = int(time.time() - 1)
+
     return (begin_time, end_time)
 
 
 def query(key, begin_time, end_time):
-
     begin_time_datetime = datetime.datetime.fromtimestamp(begin_time).strftime('%Y-%m-%d %H:%M:%S')
     end_time_datetime = datetime.datetime.fromtimestamp(end_time).strftime('%Y-%m-%d %H:%M:%S')
     print("\n Query time series in range:\n\n %s to %s \n" % (begin_time_datetime, end_time_datetime))
 
     try:
-            # for record in redis.range(key,begin_time, end_time,bucketSizeSeconds=1):
-            for record in redis.range(key, begin_time, end_time, bucket_size_msec=1000):
-                    timestamp = datetime.datetime.fromtimestamp(record[0]).strftime('%Y-%m-%d %H:%M:%S')
-                    value = round(float(record[1]),2)
-                    print(' %s : %.2f ' % (timestamp,value))
+        # for record in redis.range(key,begin_time, end_time,bucketSizeSeconds=1):
+        for record in redis.range(key, begin_time, end_time, bucket_size_msec=1000):
+            timestamp = datetime.datetime.fromtimestamp(record[0]).strftime('%Y-%m-%d %H:%M:%S')
+            value = round(float(record[1]), 2)
+            print(' %s : %.2f ' % (timestamp, value))
     except Exception as e:
-            print("\n Error: %s" % e)
+        print("\n Error: %s" % e)
     print('')
+
 
 def print_info():
     print('\n Query time series info:\n')
     for key in redis.keys('*'):
-            print(' key=%s' % (key.decode('utf8')))
-            info = redis.info(key)
-            sensor = info.labels['sensor_id']
-            print(" sensor_id=%s " % str(sensor))
-            area = info.labels['area_id']
-            print(" area_id=%s " % str(area))
-            last_time_stamp_seconds = info.__dict__['lastTimeStamp']
-            last_time_stamp = datetime.datetime.fromtimestamp(last_time_stamp_seconds).strftime('%Y-%m-%d %H:%M:%S')
-            print(" last_time_stamp=%s " % str(last_time_stamp))
+        print(' key=%s' % (key.decode('utf8')))
+        info = redis.info(key)
+        sensor = info.labels['sensor_id']
+        print(" sensor_id=%s " % str(sensor))
+        area = info.labels['area_id']
+        print(" area_id=%s " % str(area))
+        last_time_stamp_seconds = info.__dict__['lastTimeStamp']
+        last_time_stamp = datetime.datetime.fromtimestamp(last_time_stamp_seconds).strftime('%Y-%m-%d %H:%M:%S')
+        print(" last_time_stamp=%s " % str(last_time_stamp))
 
     print('')
 
-def print_loop(loops):
 
+def print_loop(loops):
     for i in range(loops):
 
-            if i == 0:
-                    sys.stdout.write(' ')
+        if i == 0:
+            sys.stdout.write(' ')
 
-            sys.stdout.write('.')
-            sys.stdout.flush()
-            time.sleep(1)
+        sys.stdout.write('.')
+        sys.stdout.flush()
+        time.sleep(1)
 
     print('')
 
@@ -90,7 +97,7 @@ begin_time, end_time = store(key, interval)
 time.sleep(1)
 
 query(key, begin_time, end_time)
-query(key, begin_time+4, end_time-5)
+query(key, begin_time + 4, end_time - 5)
 
 print_info()
 print('\n Set expire key: %s' % str(key))
