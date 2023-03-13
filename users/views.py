@@ -1,3 +1,4 @@
+from django.core.mail import EmailMessage
 from django.http.response import (
     HttpResponse,
     HttpResponseForbidden,
@@ -8,12 +9,12 @@ from django.contrib.auth import login, logout, authenticate, get_user_model
 from django.contrib.auth.decorators import login_required
 from django.utils.encoding import force_str
 from django.utils.http import urlsafe_base64_decode
-from django.contrib.auth import get_user_model
 from django_q.tasks import async_task
 from users.tokens import user_tokenizer, password_reset_tokenizer
 from django.utils.translation import gettext as _
 from django.contrib import messages
 from .forms import LoginForm, ResetRequestForm, ResetPassowrdForm
+
 
 User = get_user_model()
 
@@ -34,6 +35,12 @@ def login_view(request):
             user = authenticate(request, username=str(username), password=password)
             if user is not None:
                 login(request, user)
+                em = EmailMessage(
+                    subject="Login",
+                    body=f"Congratulations, {username}",
+                    to=[str(username)]
+                )
+                em.send()
                 return redirect("dashboard")
             else:
                 messages.error(request, _("Wrong username or password"))
